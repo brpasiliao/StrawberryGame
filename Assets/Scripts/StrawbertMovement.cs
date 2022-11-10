@@ -6,14 +6,17 @@ public class StrawbertMovement : MonoBehaviour {
     public Flower flower;
     public float speed;
 
-    private SpriteRenderer sr;
-    public Sprite up;
-    public Sprite down;
-    public Sprite side;
+    public SpriteRenderer sr;
+    public Sprite n;
+    public Sprite s;
+    public Sprite e;
+    public Sprite w;
+    public Sprite ne;
+    public Sprite nw;
+    public Sprite se;
+    public Sprite sw;
 
-    void Start() {
-        sr = GetComponent<SpriteRenderer>();
-    }
+    void Start() {}
 
     void Update() {
         if (!flower.reaching) {
@@ -27,12 +30,21 @@ public class StrawbertMovement : MonoBehaviour {
     }
 
     void Animations() {
-        if (Input.GetAxisRaw("Vertical") > 0) sr.sprite = up;
-        if (Input.GetAxisRaw("Vertical") < 0) sr.sprite = down;
-        if (Input.GetAxisRaw("Horizontal") != 0) {
-            sr.sprite = side;
-            if (Input.GetAxisRaw("Horizontal") > 0) sr.flipX = false;
-            if (Input.GetAxisRaw("Horizontal") < 0) sr.flipX = true;
-        }
+        if (Input.GetAxisRaw("Vertical") > 0 && Input.GetAxisRaw("Horizontal") > 0)
+            sr.sprite = ne;
+        else if (Input.GetAxisRaw("Vertical") > 0 && Input.GetAxisRaw("Horizontal") < 0)
+            sr.sprite = nw;
+        else if (Input.GetAxisRaw("Vertical") < 0 && Input.GetAxisRaw("Horizontal") > 0)
+            sr.sprite = se;
+        else if (Input.GetAxisRaw("Vertical") < 0 && Input.GetAxisRaw("Horizontal") < 0)
+            sr.sprite = sw;
+        else if (Input.GetAxisRaw("Vertical") > 0)
+            sr.sprite = n;
+        else if (Input.GetAxisRaw("Vertical") < 0)
+            sr.sprite = s;
+        else if (Input.GetAxisRaw("Horizontal") > 0)
+            sr.sprite = e;
+        else if (Input.GetAxisRaw("Horizontal") < 0)
+            sr.sprite = w;
     }
 }

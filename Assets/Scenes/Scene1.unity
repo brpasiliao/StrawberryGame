@@ -6119,7 +6119,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flower: {fileID: 1083468164}
-  direction: 1
 --- !u!1 &1875531368
 GameObject:
   m_ObjectHideFlags: 0
@@ -6154,9 +6153,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flower: {fileID: 1083468164}
   speed: 0.3
-  up: {fileID: 21300000, guid: 4fc82fadd0e1d4ed8a697be473d72842, type: 3}
-  down: {fileID: 21300000, guid: 0f39a9205e4394ee1b6ba8269428d176, type: 3}
-  side: {fileID: 21300000, guid: 21ae12909dfa64464820da55fc494021, type: 3}
+  n: {fileID: 79053455, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
+  s: {fileID: -382077437, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
+  e: {fileID: -1026814732, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
+  w: {fileID: -1343739413, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
+  ne: {fileID: 961418213, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
+  nw: {fileID: 795546398, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
+  se: {fileID: -929214443, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
+  sw: {fileID: -295674871, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
 --- !u!212 &1875531370
 SpriteRenderer:
   m_ObjectHideFlags: 0
