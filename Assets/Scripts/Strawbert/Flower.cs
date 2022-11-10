@@ -20,8 +20,7 @@ public class Flower : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
-        if (collider.gameObject.GetComponent<Item>() != null) {
-            Debug.Log("item");
+        if (collider.gameObject.GetComponent<Grabbable>() != null) {
             StopCoroutine("Reach");
             StartCoroutine("GrabAction", collider.gameObject);
         }
@@ -61,7 +60,6 @@ public class Flower : MonoBehaviour {
         transform.position = item.transform.position;
 
         while (!Input.anyKey) {
-            // yield return new WaitForSeconds(0.01f);
             yield return null;
         }
 

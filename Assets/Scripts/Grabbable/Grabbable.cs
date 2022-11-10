@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour{
+public class Grabbable : MonoBehaviour {
     void Start() {}
 
     void Update() {}
