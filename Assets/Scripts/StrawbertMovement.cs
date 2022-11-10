@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StrawbertMovement : MonoBehaviour {
-    public Vine vine;
+    public Flower flower;
     public float speed;
 
     private SpriteRenderer sr;
@@ -16,7 +16,7 @@ public class StrawbertMovement : MonoBehaviour {
     }
 
     void Update() {
-        if (!vine.stretching) {
+        if (!flower.reaching) {
             Walk();
             Animations();
         }
