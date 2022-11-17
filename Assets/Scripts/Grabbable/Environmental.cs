@@ -7,33 +7,27 @@ public class Environmental : Grabbable {
 
     void Update() {}
 
-    // private void OnTriggerEnter2D(Collider2D collider) {
-    //     if (collider.gameObject.GetComponent<Flower>() != null)
-    //         Flower flower = collider.gameObject.GetComponent<Flower>();
-    //         StopCoroutine("flower.Reach");
-    //         StartCoroutine("GrabAction", collider.gameObject);
-    //     }
-    // }
+    private void OnTriggerEnter2D(Collider2D collider) {
+        if (collider.gameObject.GetComponent<Flower>() != null) {
+            flower = collider.gameObject.GetComponent<Flower>();
+            flower.StopCoroutine("Reach");
+            StartCoroutine("GrabAction");
+        }
+    }
 
-    // IEnumerator GrabAction(GameObject item) {
-    //     Debug.Log("grabaction");
-    //     transform.position = item.transform.position;
+    IEnumerator GrabAction() {
+        Debug.Log("grabaction");
+        flower.grabbing = true;
+        flower.transform.position = transform.position;
 
-    //     while (!Input.anyKey) {
-    //         yield return null;
-    //     }
+        while (!Input.anyKey) { yield return null; }
 
-    //     if (Input.GetKeyDown("space")) {
-    //         item.transform.SetParent(transform);
-    //         StartCoroutine("Retract");
-    //     } else if (Input.GetKeyDown(KeyCode.F)) {
-    //         item.transform.SetParent(transform);
-    //         StartCoroutine("Reach");
-    //     } else 
-    //         StartCoroutine("Retract");
-    // }
+        if (Input.GetKeyDown("space")) Primary();
+        else if (Input.GetKeyDown(KeyCode.F)) Secondary();
+        else flower.StartCoroutine("Retract");
+    }
 
-    // void Primary() {}
+    protected virtual void Primary() {}
 
-    // void Secondary() {}
+    protected virtual void Secondary() {}
 }

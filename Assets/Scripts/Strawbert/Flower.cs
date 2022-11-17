@@ -10,7 +10,9 @@ public class Flower : MonoBehaviour {
     public float posSpeed;      // how much time in between each step
     public float posMax;        // the farthest length it can go
     public float posBack;       // multiplier to retract faster
-    public bool reaching;
+
+    public bool reaching = false;
+    public bool grabbing = false;
 
     void Start() {}
 
@@ -19,14 +21,7 @@ public class Flower : MonoBehaviour {
             StartCoroutine("Reach");
     }
 
-    private void OnTriggerEnter2D(Collider2D collider) {
-        if (collider.gameObject.GetComponent<Grabbable>() != null) {
-            StopCoroutine("Reach");
-            StartCoroutine("GrabAction", collider.gameObject);
-        }
-    }
-
-    IEnumerator Reach() {     
+    IEnumerator Reach() {
         Debug.Log("reach");
 
         GetComponent<BoxCollider2D>().enabled = true; // can grab multiple?
@@ -40,9 +35,10 @@ public class Flower : MonoBehaviour {
         transform.DetachChildren();
         StartCoroutine("Retract"); 
     }
-    
-    IEnumerator Retract() {
+
+    public IEnumerator Retract() {
         Debug.Log("retract");
+        grabbing = false;
 
         while (transform.localPosition.x > posOG) {
             transform.Translate(-posStep*posBack, 0, 0);
@@ -55,21 +51,57 @@ public class Flower : MonoBehaviour {
         GetComponent<BoxCollider2D>().enabled = false;
     }
 
-    IEnumerator GrabAction(GameObject item) {
-        Debug.Log("grabaction");
-        transform.position = item.transform.position;
+    // private void OnTriggerEnter2D(Collider2D collider) {
+    //     if (collider.gameObject.GetComponent<Grabbable>() != null) {
+    //         StopCoroutine("Reach");
+    //         StartCoroutine("GrabAction", collider.gameObject);
+    //     }
+    // }
 
-        while (!Input.anyKey) {
-            yield return null;
-        }
+    // IEnumerator Reach() {     
+    //     Debug.Log("reach");
 
-        if (Input.GetKeyDown("space")) {
-            item.transform.SetParent(transform);
-            StartCoroutine("Retract");
-        } else if (Input.GetKeyDown(KeyCode.F)) {
-            item.transform.SetParent(transform);
-            StartCoroutine("Reach");
-        } else 
-            StartCoroutine("Retract");
-    }
+    //     GetComponent<BoxCollider2D>().enabled = true; // can grab multiple?
+    //     reaching = true;
+
+    //     while (transform.localPosition.x < posMax) {
+    //         transform.Translate(posStep, 0, 0);
+    //         yield return new WaitForSeconds(posSpeed);
+    //     }
+
+    //     transform.DetachChildren();
+    //     StartCoroutine("Retract"); 
+    // }
+    
+    // IEnumerator Retract() {
+    //     Debug.Log("retract");
+
+    //     while (transform.localPosition.x > posOG) {
+    //         transform.Translate(-posStep*posBack, 0, 0);
+    //         yield return new WaitForSeconds(posSpeed);
+    //     }
+
+    //     transform.DetachChildren();
+    //     transform.localPosition = new Vector3 (posOG, 0, -2);
+    //     reaching = false;
+    //     GetComponent<BoxCollider2D>().enabled = false;
+    // }
+
+    // IEnumerator GrabAction(GameObject item) {
+    //     Debug.Log("grabaction");
+    //     transform.position = item.transform.position;
+
+    //     while (!Input.anyKey) {
+    //         yield return null;
+    //     }
+
+    //     if (Input.GetKeyDown("space")) {
+    //         item.transform.SetParent(transform);
+    //         StartCoroutine("Retract");
+    //     } else if (Input.GetKeyDown(KeyCode.F)) {
+    //         item.transform.SetParent(transform);
+    //         StartCoroutine("Reach");
+    //     } else 
+    //         StartCoroutine("Retract");
+    // }
 }
