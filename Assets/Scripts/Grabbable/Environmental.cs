@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Environmental : Grabbable {
-    void Start() {}
+    public Transform parentOG;
+
+    protected void Start() {
+        parentOG = transform.parent;
+    }
 
     void Update() {}
 
@@ -18,7 +22,7 @@ public class Environmental : Grabbable {
     IEnumerator GrabAction() {
         Debug.Log("grabaction");
         flower.grabbing = true;
-        flower.transform.position = transform.position;
+        // flower.transform.position = transform.position;
 
         while (!Input.anyKey) { yield return null; }
 

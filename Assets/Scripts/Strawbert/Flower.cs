@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Flower : MonoBehaviour {
-    public Stem stem;
+    public GameObject strawbert;
 
     public float posOG;         // original position of head
     public float posStep;       // how long each movement is
-    public float posSpeed;      // how much time in between each step
     public float posMax;        // the farthest length it can go
     public float posBack;       // multiplier to retract faster
 
     public bool reaching = false;
     public bool grabbing = false;
+    public bool grappling = false;
 
     void Start() {}
 
@@ -29,10 +29,11 @@ public class Flower : MonoBehaviour {
 
         while (transform.localPosition.x < posMax) {
             transform.Translate(posStep, 0, 0);
-            yield return new WaitForSeconds(posSpeed);
+            transform.localPosition = new Vector2(transform.localPosition.x, 0);
+            yield return null;
         }
 
-        transform.DetachChildren();
+        Release();
         StartCoroutine("Retract"); 
     }
 
@@ -40,68 +41,35 @@ public class Flower : MonoBehaviour {
         Debug.Log("retract");
         grabbing = false;
 
-        while (transform.localPosition.x > posOG) {
+        while (transform.localPosition.x > posOG+(posStep*posBack)) {
             transform.Translate(-posStep*posBack, 0, 0);
-            yield return new WaitForSeconds(posSpeed);
+            transform.localPosition = new Vector2(transform.localPosition.x, 0);
+            if (grappling) {
+                // strawbert.transform.Translate(-posStep*posBack*2, 0, 0);
+                // Debug.Log("strawbert: " + strawbert.transform.position + "; flower: " + transform.position);
+                strawbert.transform.position = Vector2.MoveTowards(strawbert.transform.position, transform.position, posStep*posBack);
+            }
+            yield return null;
         }
 
-        transform.DetachChildren();
-        transform.localPosition = new Vector3 (posOG, 0, -2);
+        Release();
+        grappling = false;
         reaching = false;
+        transform.localPosition = new Vector2 (posOG, transform.localPosition.y);
         GetComponent<BoxCollider2D>().enabled = false;
     }
 
-    // private void OnTriggerEnter2D(Collider2D collider) {
-    //     if (collider.gameObject.GetComponent<Grabbable>() != null) {
-    //         StopCoroutine("Reach");
-    //         StartCoroutine("GrabAction", collider.gameObject);
-    //     }
-    // }
-
-    // IEnumerator Reach() {     
-    //     Debug.Log("reach");
-
-    //     GetComponent<BoxCollider2D>().enabled = true; // can grab multiple?
-    //     reaching = true;
-
-    //     while (transform.localPosition.x < posMax) {
-    //         transform.Translate(posStep, 0, 0);
-    //         yield return new WaitForSeconds(posSpeed);
-    //     }
-
-    //     transform.DetachChildren();
-    //     StartCoroutine("Retract"); 
-    // }
-    
-    // IEnumerator Retract() {
-    //     Debug.Log("retract");
-
+    // public IEnumerator Grapple() {
     //     while (transform.localPosition.x > posOG) {
-    //         transform.Translate(-posStep*posBack, 0, 0);
-    //         yield return new WaitForSeconds(posSpeed);
-    //     }
-
-    //     transform.DetachChildren();
-    //     transform.localPosition = new Vector3 (posOG, 0, -2);
-    //     reaching = false;
-    //     GetComponent<BoxCollider2D>().enabled = false;
-    // }
-
-    // IEnumerator GrabAction(GameObject item) {
-    //     Debug.Log("grabaction");
-    //     transform.position = item.transform.position;
-
-    //     while (!Input.anyKey) {
+    //         strawbert.transform.Translate(-posStep*posBack, 0, 0);
     //         yield return null;
     //     }
-
-    //     if (Input.GetKeyDown("space")) {
-    //         item.transform.SetParent(transform);
-    //         StartCoroutine("Retract");
-    //     } else if (Input.GetKeyDown(KeyCode.F)) {
-    //         item.transform.SetParent(transform);
-    //         StartCoroutine("Reach");
-    //     } else 
-    //         StartCoroutine("Retract");
     // }
+
+    private void Release() {
+        if (transform.childCount > 0) {
+            Transform child = transform.GetChild(0);
+            transform.GetChild(0).SetParent(child.GetComponent<Environmental>().parentOG);
+        }
+    }
 }
