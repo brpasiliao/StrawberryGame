@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Stem : MonoBehaviour {
-    public Flower flower;
-
     void Start() {}
 
     void Update() {
-        if (!flower.reaching) {
+        if (!Flower.reaching && !SpringLeaf.launching)  {
             if (Input.GetAxisRaw("Vertical") > 0 && Input.GetAxisRaw("Horizontal") > 0) // ne
                 transform.rotation = Quaternion.Euler(0, 0, 45);
             else if (Input.GetAxisRaw("Vertical") > 0 && Input.GetAxisRaw("Horizontal") < 0) // nw

@@ -765,7 +765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93bfc02b05d664f91a51f8342965af9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: 2
+  offset: 0.7
 --- !u!4 &333630295
 Transform:
   m_ObjectHideFlags: 0
@@ -4753,7 +4753,6 @@ MonoBehaviour:
   posStep: 0.15
   posMax: 4.5
   posBack: 2
-  reaching: 0
   grabbing: 0
   grappling: 0
 --- !u!95 &1083468165
@@ -16689,7 +16688,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 104427c24237e4d099945ff50a5714b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flower: {fileID: 1083468164}
   n: {fileID: 79053455, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
   s: {fileID: -382077437, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
   e: {fileID: -1026814732, guid: 4561894dbfc7a58429b7a024913a22fb, type: 3}
@@ -16812,7 +16810,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 394624801e7be4625a0f1da515a09151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flower: {fileID: 1083468164}
 --- !u!1 &1495517053
 GameObject:
   m_ObjectHideFlags: 0
@@ -18839,7 +18836,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdd10f5e8ba024b1ca99db0669389aa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flower: {fileID: 1083468164}
   speed: 0.15
 --- !u!4 &1875531371
 Transform:

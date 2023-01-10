@@ -10,7 +10,7 @@ public class Flower : MonoBehaviour {
     public float posMax;        // the farthest length it can go
     public float posBack;       // multiplier to retract faster
 
-    public bool reaching = false;
+    public static bool reaching = false;
     public bool grabbing = false;
     public bool grappling = false;
 

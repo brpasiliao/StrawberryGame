@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StrawbertAnimation : MonoBehaviour {
-    public Flower flower;
-
     private SpriteRenderer sr;
     public Sprite n;
     public Sprite s;
@@ -20,7 +18,8 @@ public class StrawbertAnimation : MonoBehaviour {
     }
 
     void Update() {
-        if (!flower.reaching) Animation();
+        if (!Flower.reaching && !SpringLeaf.launching) 
+            Animation();
     }
 
     void Animation() {

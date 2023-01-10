@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StrawbertBehavior : MonoBehaviour {
-    public Flower flower;
-
     public float speed;
     private Vector3 destination;
 
     void Start() {}
 
     void Update() {
-        if (!flower.reaching) Walk();
+        if (!Flower.reaching && !SpringLeaf.launching) 
+            Walk();
     }
 
     void Walk() {

@@ -7,6 +7,8 @@ public class SpringLeaf : MonoBehaviour {
     public GameObject pointerGO;
     public Pointer pointerC;
 
+    public static bool launching;
+
     private List<Transform> nearbyObjects;
     // private Transform selected;
 
@@ -30,7 +32,6 @@ public class SpringLeaf : MonoBehaviour {
 
         } else if (collider.gameObject.GetComponent<RasBehavior>() == null) {
             nearbyObjects.Add(collider.transform);
-            Debug.Log("not ras");
         }
     }
 
@@ -51,7 +52,7 @@ public class SpringLeaf : MonoBehaviour {
         pointerC.PointTo(nearbyObjects[index]);
         pointerGO.SetActive(true);
 
-        while (!Input.GetKeyDown("space")) {
+        while (!Input.GetKeyDown(KeyCode.F)) {
             if (Input.GetKeyDown(KeyCode.Q)) {
                 if (index == 0) index = nearbyObjects.Count-1;
                 else index--;
@@ -64,5 +65,14 @@ public class SpringLeaf : MonoBehaviour {
 
             yield return null;
         }
+
+        launching = true;
+        GetComponent<CapsuleCollider2D>().enabled = false;
+        nearbyObjects[index].position = transform.position;
+
+        while (!Input.GetKeyDown(KeyCode.Z)) yield return null;
+
+        GetComponent<CapsuleCollider2D>().enabled = true;
+        launching = false;
     }
 }
