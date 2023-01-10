@@ -6,6 +6,8 @@ using UnityEngine;
 public class RasBehavior : MonoBehaviour {
     public Transform strawbert;
 
+    public bool withStrawbert = true;
+
     public float speed;
     public float maxDistanceX;      // max x distance from strawbert
     public float maxDistanceY;      // max y distance from strawbert
