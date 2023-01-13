@@ -69,10 +69,20 @@ public class SpringLeaf : MonoBehaviour {
         launching = true;
         GetComponent<CapsuleCollider2D>().enabled = false;
         nearbyObjects[index].position = transform.position;
+        
+        EventBroker.CallSpringleafActivation();
 
-        while (!Input.GetKeyDown(KeyCode.Z)) yield return null;
+        while (!Input.GetKeyDown(KeyCode.Z)) {
+            if (Input.GetKeyDown("space"))
+            {
+                Debug.Log("here.");
+                
+            }
+            yield return null;
+        }
 
         GetComponent<CapsuleCollider2D>().enabled = true;
         launching = false;
+        EventBroker.CallSpringleafdeactivation();
     }
 }

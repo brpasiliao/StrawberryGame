@@ -22,7 +22,7 @@ public class StrawbertAnimation : MonoBehaviour {
             Animation();
     }
 
-    void Animation() {
+    void Animation(){
         if (Input.GetAxisRaw("Vertical") > 0 && Input.GetAxisRaw("Horizontal") > 0)
             sr.sprite = ne;
         else if (Input.GetAxisRaw("Vertical") > 0 && Input.GetAxisRaw("Horizontal") < 0)

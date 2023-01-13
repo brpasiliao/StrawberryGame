@@ -13,11 +13,12 @@ public class Flower : MonoBehaviour {
     public static bool reaching = false;
     public bool grabbing = false;
     public bool grappling = false;
+    private bool disabled = false;
 
     void Start() {}
 
     void Update() {
-        if (!reaching && Input.GetKeyDown("space"))
+        if (!reaching && !SpringLeaf.launching && Input.GetKeyDown("space"))
             StartCoroutine("Reach");
     }
 
@@ -34,6 +35,7 @@ public class Flower : MonoBehaviour {
         }
 
         Release();
+
         StartCoroutine("Retract"); 
     }
 
