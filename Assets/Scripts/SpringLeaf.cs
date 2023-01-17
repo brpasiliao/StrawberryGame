@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum SpringLeafDirections {UpDown, LeftRight}
+public enum SpringLeafObject { Player, Ras, ThrownObject}
+
 public class SpringLeaf : MonoBehaviour {
     public RasBehavior Ras;
     public GameObject pointerGO;
     public Pointer pointerC;
 
     public static bool launching;
+    public SpringLeafDirections orientation;
+    public SpringLeafObject objectToThrow;
+    public int distance = 4;
 
     private List<Transform> nearbyObjects;
     // private Transform selected;
@@ -47,18 +53,23 @@ public class SpringLeaf : MonoBehaviour {
         }
     }
 
-    IEnumerator SelectOption() {
+    IEnumerator SelectOption()
+    {
         int index = 0;
         pointerC.PointTo(nearbyObjects[index]);
         pointerGO.SetActive(true);
 
-        while (!Input.GetKeyDown(KeyCode.F)) {
-            if (Input.GetKeyDown(KeyCode.Q)) {
-                if (index == 0) index = nearbyObjects.Count-1;
+        while (!Input.GetKeyDown(KeyCode.F))
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                if (index == 0) index = nearbyObjects.Count - 1;
                 else index--;
                 pointerC.PointTo(nearbyObjects[index]);
-            } else if (Input.GetKeyDown(KeyCode.E)) {
-                if (index == nearbyObjects.Count-1) index = 0;
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (index == nearbyObjects.Count - 1) index = 0;
                 else index++;
                 pointerC.PointTo(nearbyObjects[index]);
             }
@@ -69,20 +80,33 @@ public class SpringLeaf : MonoBehaviour {
         launching = true;
         GetComponent<CapsuleCollider2D>().enabled = false;
         nearbyObjects[index].position = transform.position;
-        
-        EventBroker.CallSpringleafActivation();
 
-        while (!Input.GetKeyDown(KeyCode.Z)) {
+        if (nearbyObjects[index].tag == Tags.PLAYER)
+            objectToThrow = SpringLeafObject.Player;
+        else if (nearbyObjects[index].tag == Tags.RAS)
+            objectToThrow = SpringLeafObject.Ras;
+        else if(nearbyObjects[index].tag == Tags.OBJECT) {
+            objectToThrow = SpringLeafObject.ThrownObject;
+            //nearbyObjects[index].tag == Tags.THROWNOBJECT;
+        }
+
+        while (!Input.GetKeyDown(KeyCode.Z))
+        {
             if (Input.GetKeyDown("space"))
             {
-                Debug.Log("here.");
-                
+                EventBroker.CallSpringleafActivation(orientation, objectToThrow, distance);
+                ResetSpringLeaf();
+                yield return null;
             }
             yield return null;
         }
 
+        ResetSpringLeaf();
+    }
+
+    private void ResetSpringLeaf()
+    {
         GetComponent<CapsuleCollider2D>().enabled = true;
         launching = false;
-        EventBroker.CallSpringleafdeactivation();
     }
 }
