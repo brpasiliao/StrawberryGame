@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Resource
   - Valuable
+  - Object
+  - ThrownObject
+  - Ras
+  - Wall
+  - River
   layers:
   - Default
   - TransparentFX

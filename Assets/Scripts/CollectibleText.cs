@@ -24,7 +24,7 @@ public class CollectibleText : MonoBehaviour {
     }
 
     public void UpdateResource() {
-        if (resource && !valuable){
+        if (resource && !valuable) {
             score.text = "Resource: " + ++resourceCounter;
         }
     }

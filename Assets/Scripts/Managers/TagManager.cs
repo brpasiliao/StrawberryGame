@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Tags {
     public const string PLAYER = "Player";
     public const string RAS = "Ras";
@@ -10,6 +6,8 @@ public class Tags {
     public const string ARTIFACT = "Artifact";
     public const string OBJECT = "Object";
     public const string THROWNOBJECT = "ThrownObject";
+    public const string WALLCOLLISION = "Wall";
+    public const string RIVERCOLLISION = "River";
 }
 
 public class PlayerInput {
@@ -29,7 +27,7 @@ public class PlayerAnimations {
     public const string SOUTHEAST = "MoveSouthEast";
 }
 
-public class Directions{
+public class Directions {
     public const string NORTH = "North";
     public const string SOUTH = "South";
     public const string EAST = "East";
@@ -40,7 +38,7 @@ public class Directions{
     public const string SOUTHEAST = "SouthEast";
 }
 
-public class FlowerAnimations{
+public class FlowerAnimations {
     public const string NORTH = "ReachNorth";
     public const string SOUTH = "ReachSouth";
     public const string EAST = "ReachEast";
