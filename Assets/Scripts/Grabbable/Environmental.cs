@@ -11,7 +11,7 @@ public class Environmental : Grabbable {
 
     void Update() {}
 
-    private void OnTriggerEnter2D(Collider2D collider) {
+    protected virtual void OnTriggerEnter2D(Collider2D collider) {
         if (collider.gameObject.GetComponent<Flower>() != null) {
             flower = collider.gameObject.GetComponent<Flower>();
             flower.StopCoroutine("Reach");

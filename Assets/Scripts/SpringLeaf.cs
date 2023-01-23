@@ -87,25 +87,26 @@ public class SpringLeaf : MonoBehaviour {
 
         thrownObject = nearbyObjects[index].gameObject;
         thrownObject.GetComponent<IThrowable>().ThrowingObject();
+
         //ThrowingObject(index); 
 
         while (!Input.GetKeyDown(KeyCode.Z)) {
 
             if (orientation == SpringLeafDirections.LeftRight) {
-                if (Input.GetKeyDown(KeyCode.LeftArrow) && !clickedDirection) {
+                if (Input.GetKeyDown(KeyCode.LeftArrow) && !clickedDirection && launching) {
                     clickedDirection = true;
                     StartCoroutine(ThrowingObject(leftTarget));
                 }
-                else if (Input.GetKeyDown(KeyCode.RightArrow) && !clickedDirection) {
+                else if (Input.GetKeyDown(KeyCode.RightArrow) && !clickedDirection && launching) {
                     clickedDirection = true;
                     StartCoroutine(ThrowingObject(rightTarget));
                 }
             } else if (orientation == SpringLeafDirections.UpDown) {
-                if (Input.GetKeyDown(KeyCode.UpArrow) && !clickedDirection) {
+                if (Input.GetKeyDown(KeyCode.UpArrow) && !clickedDirection && launching) {
                     clickedDirection = true;
                     StartCoroutine(ThrowingObject(upTarget));
                 }
-                else if (Input.GetKeyDown(KeyCode.DownArrow) && !clickedDirection) {
+                else if (Input.GetKeyDown(KeyCode.DownArrow) && !clickedDirection && launching) {
                     clickedDirection = true;
                     StartCoroutine(ThrowingObject(downTarget));
                 }
@@ -119,6 +120,7 @@ public class SpringLeaf : MonoBehaviour {
     }
 
     private IEnumerator ThrowingObject(Transform direction) {
+        EventBroker.CallCameraTarget(thrownObject.transform);
         while (Vector2.Distance(thrownObject.transform.position, direction.position) > 0.05f && thrownObject.GetComponent<IThrowable>().HittingSomething != true)
         {
             thrownObject.transform.position = Vector2.Lerp(thrownObject.transform.position, direction.position, smoothing * Time.deltaTime);
@@ -138,6 +140,7 @@ public class SpringLeaf : MonoBehaviour {
 
     private void ResetSpringLeaf() {
         GetComponent<CapsuleCollider2D>().enabled = true;
+        EventBroker.CallPlayerCamera();
         launching = false;
         clickedDirection = false;
     }

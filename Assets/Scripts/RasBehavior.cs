@@ -19,35 +19,78 @@ public class RasBehavior : MonoBehaviour, IThrowable {
 
     void Start() {}
 
-    void Update() {
+    void Update()
+    {
+        if (!SpringLeaf.launching)
+            FollowStrawbert();
+    }
+
+    private void FollowStrawbert()
+    {
         posDiffX = Math.Abs(strawbert.position.x - transform.position.x);
         posDiffY = Math.Abs(strawbert.position.y - transform.position.y);
         if (posDiffX > maxDistanceX || posDiffY > maxDistanceX)
             transform.position = Vector2.MoveTowards(transform.position, strawbert.position, speed);
     }
 
-    public void ResetObject()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        throw new NotImplementedException();
+        ThrownCollisionEnter(collision);
     }
 
-    public void ThrowingObject()
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        throw new NotImplementedException();
+        ThrownCollisionExit(collision);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        ThrownTriggerEnter(collision);
+    }
+
+
 
     public void ThrownCollisionEnter(Collision2D collision)
     {
-        throw new NotImplementedException();
+        if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT)
+        {
+            HittingSomething = true;
+        }
+        else if (collision.gameObject.tag == Tags.RIVERCOLLISION && SpringLeaf.launching)
+        {
+            gameObject.GetComponent<CapsuleCollider2D>().isTrigger = true;
+            InRiver = true;
+        }
     }
 
     public void ThrownCollisionExit(Collision2D collision)
     {
-        throw new NotImplementedException();
+        if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT)
+        {
+            HittingSomething = false;
+        }
+        else if (collision.gameObject.tag == Tags.RIVERCOLLISION)
+        {
+            //inRiver = false;
+        }
     }
 
     public void ThrownTriggerEnter(Collider2D collision)
     {
-        throw new NotImplementedException();
+        if (collision.gameObject.tag == Tags.RIVERCOLLISION && SpringLeaf.launching)
+        {
+            InRiver = false;
+        }
+    }
+
+    public void ThrowingObject()
+    {
+        enabled = false;
+    }
+
+    public void ResetObject()
+    {
+        enabled = true;
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
     }
 }

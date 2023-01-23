@@ -12,7 +12,6 @@ public class Flower : MonoBehaviour {
     public static bool reaching = false;
     public bool grabbing = false;
     public bool grappling = false;
-    private bool disabled = false;
 
     void Start() {}
 

@@ -5,8 +5,8 @@ using System.Collections;
 public static class EventBroker {
     public static event Action onResourceCollection;
     public static event Action onValuableCollection;
-    public static event Action<SpringLeafDirections, SpringLeafObject, int> onSpringleafActivation;
-    public static event Action onSpringleafDeactivation;
+    public static event Action<Transform> onCameraTarget;
+    public static event Action onPlayerCamera;
 
     public static void CallResourceCollection() {
         onResourceCollection?.Invoke();
@@ -16,12 +16,14 @@ public static class EventBroker {
         onValuableCollection?.Invoke();
     }
 
-    public static void CallSpringleafActivation(SpringLeafDirections direction, SpringLeafObject ThrownObject, int distance) {
-        onSpringleafActivation?.Invoke(direction, ThrownObject, distance);
+    public static void CallCameraTarget(Transform target)
+    {
+        onCameraTarget?.Invoke(target);
     }
 
-    public static void CallSpringleafdeactivation() {
-        onSpringleafDeactivation?.Invoke();
+    public static void CallPlayerCamera()
+    {
+        onPlayerCamera?.Invoke();
     }
 
 }
