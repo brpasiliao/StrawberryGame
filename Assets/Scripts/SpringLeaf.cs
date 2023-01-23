@@ -84,10 +84,13 @@ public class SpringLeaf : MonoBehaviour {
         GetComponent<CapsuleCollider2D>().enabled = false;
         objOriginalPos = nearbyObjects[index].position;
         nearbyObjects[index].position = transform.position;
-        ThrowingObject(index);
+
+        thrownObject = nearbyObjects[index].gameObject;
+        thrownObject.GetComponent<IThrowable>().ThrowingObject();
+        //ThrowingObject(index); 
 
         while (!Input.GetKeyDown(KeyCode.Z)) {
-            thrownObject = nearbyObjects[index].gameObject;
+
             if (orientation == SpringLeafDirections.LeftRight) {
                 if (Input.GetKeyDown(KeyCode.LeftArrow) && !clickedDirection) {
                     clickedDirection = true;
@@ -111,24 +114,26 @@ public class SpringLeaf : MonoBehaviour {
             yield return null;
         }
         ResetSpringLeaf();
-        ResetThrownObject();
+        thrownObject.GetComponent<IThrowable>().ResetObject();
+        //ResetThrownObject();
     }
 
     private IEnumerator ThrowingObject(Transform direction) {
-        while (Vector2.Distance(thrownObject.transform.position, direction.position) > 0.05f && thrownObject.GetComponent<StrawbertBehavior>().hittingSomething != true)
+        while (Vector2.Distance(thrownObject.transform.position, direction.position) > 0.05f && thrownObject.GetComponent<IThrowable>().HittingSomething != true)
         {
             thrownObject.transform.position = Vector2.Lerp(thrownObject.transform.position, direction.position, smoothing * Time.deltaTime);
             yield return null;
         }
         
-        if(thrownObject.GetComponent<StrawbertBehavior>().inRiver == true)
+        if(thrownObject.GetComponent<IThrowable>().InRiver == true)
         {
             thrownObject.transform.position = objOriginalPos;
-            thrownObject.GetComponent<StrawbertBehavior>().inRiver = false;
+            thrownObject.GetComponent<IThrowable>().InRiver = false;
         }
 
         ResetSpringLeaf();
-        ResetThrownObject();
+        //ResetThrownObject();
+        thrownObject.GetComponent<IThrowable>().ResetObject();
     }
 
     private void ResetSpringLeaf() {
@@ -137,7 +142,7 @@ public class SpringLeaf : MonoBehaviour {
         clickedDirection = false;
     }
 
-    private void ResetThrownObject() {
+    /*private void ResetThrownObject() {
         if (thrownObject.GetComponent<StrawbertBehavior>() != null)
         {
             thrownObject.GetComponent<StrawbertBehavior>().enabled = true;
@@ -161,13 +166,11 @@ public class SpringLeaf : MonoBehaviour {
         if (nearbyObjects[index].GetComponent<StrawbertBehavior>() != null) {
             nearbyObjects[index].GetComponent<StrawbertBehavior>().enabled = false;
         }
-        else if (thrownObject.GetComponent<RasBehavior>() != null)
-        {
+        else if (thrownObject.GetComponent<RasBehavior>() != null) {
             thrownObject.GetComponent<RasBehavior>().enabled = false;
         }
-        else if (thrownObject.GetComponent<Environmental>() != null)
-        {
+        else if (thrownObject.GetComponent<Environmental>() != null) {
 
         }
-    }
+    }*/
 }
