@@ -7,7 +7,7 @@ public class LogBreak : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.GetComponent<Light>() && SpringLeaf.launching)
+        if (collision.gameObject.GetComponent<Light>() && SpringLeaf.launching)
         {
             Destroy(gameObject);
         }

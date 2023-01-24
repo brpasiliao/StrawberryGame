@@ -15,6 +15,12 @@ public class StrawbertBehavior : MonoBehaviour, IThrowable {
             Walk();
     }
 
+    void Walk() {
+        destination = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
+        destination.Normalize();
+        transform.Translate(destination.x*speed, destination.y*speed, 0);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision) {
         ThrownCollisionEnter(collision);
     }
@@ -23,26 +29,8 @@ public class StrawbertBehavior : MonoBehaviour, IThrowable {
         ThrownCollisionExit(collision);
     }
 
-
-
     private void OnTriggerEnter2D(Collider2D collision) {
         ThrownTriggerEnter(collision);
-    }
-
-
-
-    /*private void OnTriggerExit2D(Collider2D collision)
-    {
-        if(collision.gameObject.tag == Tags.RIVERCOLLISION && SpringLeaf.launching)
-        {
-            inRiver = false;
-        }
-    } */
-
-    void Walk() {
-        destination = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
-        destination.Normalize();
-        transform.Translate(destination.x*speed, destination.y*speed, 0);
     }
 
     public void ThrownCollisionEnter(Collision2D collision) {
@@ -59,9 +47,6 @@ public class StrawbertBehavior : MonoBehaviour, IThrowable {
         if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT) {
             HittingSomething = false;
         }
-        else if (collision.gameObject.tag == Tags.RIVERCOLLISION) {
-            //inRiver = false;
-        }
     }
 
     public void ThrownTriggerEnter(Collider2D collision) {
@@ -70,13 +55,11 @@ public class StrawbertBehavior : MonoBehaviour, IThrowable {
         }
     }
 
-    public void ThrowingObject()
-    {
+    public void ThrowingObject() {
         enabled = false;
     }
 
-    public void ResetObject()
-    {
+    public void ResetObject() {
         enabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().isTrigger = false;

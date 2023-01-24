@@ -8,6 +8,8 @@ public class Flower : MonoBehaviour {
     public float posStep;       // how long each movement is
     public float posMax;        // the farthest length it can go
     public float posBack;       // multiplier to retract faster
+    public float lerpSmoothing;
+    public float lerpCutoff;
 
     public static bool reaching = false;
     public bool grabbing = false;
@@ -26,24 +28,32 @@ public class Flower : MonoBehaviour {
         GetComponent<BoxCollider2D>().enabled = true; // can grab multiple?
         reaching = true;
 
-        while (transform.localPosition.x < posMax) {
-            transform.Translate(posStep, 0, 0);
-            transform.localPosition = new Vector2(transform.localPosition.x, 0);
+        // lerp
+        Vector3 end = new Vector3(posMax, 0, 0);
+        while (transform.localPosition.x < posMax-lerpCutoff) {
+            transform.localPosition = Vector2.Lerp(transform.localPosition, end, lerpSmoothing * Time.deltaTime);            // transform.Translate(posStep, 0, 0);
+            // transform.localPosition = new Vector2(transform.localPosition.x, 0);
             yield return null;
         }
 
         Release();
 
         StartCoroutine("Retract"); 
+        AstarPath.active.Scan();
     }
 
     public IEnumerator Retract() {
         Debug.Log("retract");
         grabbing = false;
 
-        while (transform.localPosition.x > posOG+(posStep*posBack)) {
-            transform.Translate(-posStep*posBack, 0, 0);
-            transform.localPosition = new Vector2(transform.localPosition.x, 0);
+        // lerp
+        Vector3 end = new Vector3(posOG, 0, 0);
+        while (transform.localPosition.x > posOG+lerpCutoff) {
+            transform.localPosition = Vector2.Lerp(transform.localPosition, end, lerpSmoothing * Time.deltaTime);
+
+        // while (transform.localPosition.x > posOG+(posStep*posBack)) {
+            // transform.Translate(-posStep*posBack, 0, 0);
+            // transform.localPosition = new Vector2(transform.localPosition.x, 0);
             if (grappling) {
                 // strawbert.transform.Translate(-posStep*posBack*2, 0, 0);
                 // Debug.Log("strawbert: " + strawbert.transform.position + "; flower: " + transform.position);
@@ -57,6 +67,7 @@ public class Flower : MonoBehaviour {
         reaching = false;
         transform.localPosition = new Vector2 (posOG, transform.localPosition.y);
         GetComponent<BoxCollider2D>().enabled = false;
+        AstarPath.active.Scan();
     }
 
     // public IEnumerator Grapple() {

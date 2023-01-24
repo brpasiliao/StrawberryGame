@@ -6,7 +6,7 @@ public enum SpringLeafDirections {UpDown, LeftRight}
 public enum SpringLeafObject { Player, Ras, ThrownObject}
 
 public class SpringLeaf : MonoBehaviour {
-    public RasBehavior Ras;
+    public RasBehavior ras;
     public GameObject pointerGO;
     public Pointer pointerC;
 
@@ -37,14 +37,14 @@ public class SpringLeaf : MonoBehaviour {
             if (nearbyObjects.Count == 0) nearbyObjects.Add(collider.transform);
             else nearbyObjects.Insert(0, collider.transform);
 
-            if (Ras.withStrawbert) {
-                if (nearbyObjects.Count == 1) nearbyObjects.Add(Ras.transform);
-                else nearbyObjects.Insert(1, Ras.transform);
+            if (ras.withStrawbert) {
+                if (nearbyObjects.Count == 1) nearbyObjects.Add(ras.transform);
+                else nearbyObjects.Insert(1, ras.transform);
             }
 
-            StartCoroutine("SelectOption");
+            StartCoroutine("SelectObjectToThrow");
 
-        } else if (collider.gameObject.GetComponent<RasBehavior>() == null) {
+        } else if (collider.gameObject.GetComponent<Light>() != null) {
             nearbyObjects.Add(collider.transform);
         }
     }
@@ -52,16 +52,16 @@ public class SpringLeaf : MonoBehaviour {
     private void OnTriggerExit2D(Collider2D collider) {
         if (collider.gameObject.GetComponent<StrawbertBehavior>() != null) {
             nearbyObjects.Remove(collider.transform);
-            nearbyObjects.Remove(Ras.transform);
-            StopCoroutine("SelectOption");
+            nearbyObjects.Remove(ras.transform);
+            StopCoroutine("SelectObjectToThrow");
             pointerGO.SetActive(false);
 
-        } else if (collider.gameObject.GetComponent<RasBehavior>() == null) {
+        } else if (collider.gameObject.GetComponent<Light>() != null) {
             nearbyObjects.Remove(collider.transform);
         }
     }
 
-    IEnumerator SelectOption() {
+    IEnumerator SelectObjectToThrow() {
         int index = 0;
         pointerC.PointTo(nearbyObjects[index]);
         pointerGO.SetActive(true);
@@ -80,6 +80,7 @@ public class SpringLeaf : MonoBehaviour {
             yield return null;
         }
 
+        pointerGO.SetActive(false);
         launching = true;
         GetComponent<CapsuleCollider2D>().enabled = false;
         objOriginalPos = nearbyObjects[index].position;
@@ -89,37 +90,42 @@ public class SpringLeaf : MonoBehaviour {
         thrownObject.GetComponent<IThrowable>().ThrowingObject();
 
         //ThrowingObject(index); 
+        StartCoroutine("SelectDirectionToThrow");
+    }
 
+    IEnumerator SelectDirectionToThrow() {
         while (!Input.GetKeyDown(KeyCode.Z)) {
-
             if (orientation == SpringLeafDirections.LeftRight) {
-                if (Input.GetKeyDown(KeyCode.LeftArrow) && !clickedDirection && launching) {
-                    clickedDirection = true;
+                if (Input.GetKeyDown(KeyCode.LeftArrow) && !clickedDirection && launching)
                     StartCoroutine(ThrowingObject(leftTarget));
-                }
-                else if (Input.GetKeyDown(KeyCode.RightArrow) && !clickedDirection && launching) {
-                    clickedDirection = true;
+                else if (Input.GetKeyDown(KeyCode.RightArrow) && !clickedDirection && launching)
                     StartCoroutine(ThrowingObject(rightTarget));
-                }
+
             } else if (orientation == SpringLeafDirections.UpDown) {
                 if (Input.GetKeyDown(KeyCode.UpArrow) && !clickedDirection && launching) {
-                    clickedDirection = true;
                     StartCoroutine(ThrowingObject(upTarget));
-                }
-                else if (Input.GetKeyDown(KeyCode.DownArrow) && !clickedDirection && launching) {
-                    clickedDirection = true;
+                } else if (Input.GetKeyDown(KeyCode.DownArrow) && !clickedDirection && launching) {
+                    
                     StartCoroutine(ThrowingObject(downTarget));
                 }
             }
 
             yield return null;
         }
+        
         ResetSpringLeaf();
         thrownObject.GetComponent<IThrowable>().ResetObject();
+        StartCoroutine("SelectObjectToThrow");
         //ResetThrownObject();
     }
 
     private IEnumerator ThrowingObject(Transform direction) {
+        clickedDirection = true;
+        StopCoroutine("SelectDirectionToThrow");
+
+        if (thrownObject.GetComponent<RasBehavior>() != null || thrownObject.GetComponent<StrawbertBehavior>() != null)
+            ras.withStrawbert = false;
+
         EventBroker.CallCameraTarget(thrownObject.transform);
         while (Vector2.Distance(thrownObject.transform.position, direction.position) > 0.05f && thrownObject.GetComponent<IThrowable>().HittingSomething != true)
         {
@@ -127,7 +133,7 @@ public class SpringLeaf : MonoBehaviour {
             yield return null;
         }
         
-        if(thrownObject.GetComponent<IThrowable>().InRiver == true)
+        if (thrownObject.GetComponent<IThrowable>().InRiver)
         {
             thrownObject.transform.position = objOriginalPos;
             thrownObject.GetComponent<IThrowable>().InRiver = false;
@@ -136,6 +142,7 @@ public class SpringLeaf : MonoBehaviour {
         ResetSpringLeaf();
         //ResetThrownObject();
         thrownObject.GetComponent<IThrowable>().ResetObject();
+        if (!ras.withStrawbert) ras.StartCoroutine("TeleportToStrawbert");
     }
 
     private void ResetSpringLeaf() {

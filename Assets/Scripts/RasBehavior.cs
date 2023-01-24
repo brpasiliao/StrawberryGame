@@ -6,7 +6,9 @@ using UnityEngine;
 public class RasBehavior : MonoBehaviour, IThrowable {
     public Transform strawbert;
 
+    public bool canMove = true;
     public bool withStrawbert = true;
+    public float waitTeleport;
 
     public float speed;
     public float maxDistanceX;      // max x distance from strawbert
@@ -19,19 +21,22 @@ public class RasBehavior : MonoBehaviour, IThrowable {
 
     void Start() {}
 
-    void Update()
-    {
-        if (!SpringLeaf.launching)
-            FollowStrawbert();
+    void Update(){
+        // if (!SpringLeaf.launching)
+        //     FollowStrawbert();
     }
 
-    private void FollowStrawbert()
-    {
-        posDiffX = Math.Abs(strawbert.position.x - transform.position.x);
-        posDiffY = Math.Abs(strawbert.position.y - transform.position.y);
-        if (posDiffX > maxDistanceX || posDiffY > maxDistanceX)
-            transform.position = Vector2.MoveTowards(transform.position, strawbert.position, speed);
+    void SetCanMove(bool can) {
+        if (can) GetComponent<Pathfinding>().canMove = true;
+        else GetComponent<Pathfinding>().canMove = false;
     }
+
+    // private void FollowStrawbert() {
+    //     posDiffX = Math.Abs(strawbert.position.x - transform.position.x);
+    //     posDiffY = Math.Abs(strawbert.position.y - transform.position.y);
+    //     if (posDiffX > maxDistanceX || posDiffY > maxDistanceX)
+    //         transform.position = Vector2.MoveTowards(transform.position, strawbert.position, speed);
+    // }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -92,5 +97,11 @@ public class RasBehavior : MonoBehaviour, IThrowable {
     {
         enabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+    }
+
+    IEnumerator TeleportToStrawbert() {
+        yield return new WaitForSeconds(waitTeleport);
+        transform.position = new Vector2(strawbert.position.x-1, strawbert.position.y);
+        withStrawbert = true;
     }
 }
