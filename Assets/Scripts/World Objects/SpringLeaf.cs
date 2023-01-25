@@ -5,7 +5,7 @@ using UnityEngine;
 public enum SpringLeafDirections {UpDown, LeftRight}
 
 public class SpringLeaf : MonoBehaviour {
-    public RasBehavior ras;
+    RasBehavior ras;
     public GameObject pointerGO;
     public Pointer pointerC;
     public SpringLeafDirections orientation;
@@ -23,6 +23,7 @@ public class SpringLeaf : MonoBehaviour {
     private bool clickedDirection;
 
     void Start() {
+        ras = GameObject.FindWithTag(Tags.RAS).GetComponent<RasBehavior>();
         nearbyObjects = new List<Transform>();
     }
 
@@ -67,8 +68,8 @@ public class SpringLeaf : MonoBehaviour {
                 if (index == 0) index = nearbyObjects.Count - 1;
                 else index--;
                 pointerC.PointTo(nearbyObjects[index]);
-            }
-            else if (Input.GetKeyDown(KeyCode.E)) {
+
+            } else if (Input.GetKeyDown(KeyCode.E)) {
                 if (index == nearbyObjects.Count - 1) index = 0;
                 else index++;
                 pointerC.PointTo(nearbyObjects[index]);
@@ -85,6 +86,7 @@ public class SpringLeaf : MonoBehaviour {
 
         launchedObject = nearbyObjects[index].gameObject;
         launchedObject.GetComponent<ILaunchable>().BeingLaunched = true;
+        EventBroker.CallCameraTarget(launchedObject.transform);
 
         StartCoroutine("SelectDirectionToLaunch");
     }
@@ -98,12 +100,10 @@ public class SpringLeaf : MonoBehaviour {
                     StartCoroutine(LaunchingObject(rightTarget));
 
             } else if (orientation == SpringLeafDirections.UpDown) {
-                if (Input.GetKeyDown(KeyCode.UpArrow) && !clickedDirection) {
+                if (Input.GetKeyDown(KeyCode.UpArrow) && !clickedDirection)
                     StartCoroutine(LaunchingObject(upTarget));
-                } else if (Input.GetKeyDown(KeyCode.DownArrow) && !clickedDirection) {
-                    
+                else if (Input.GetKeyDown(KeyCode.DownArrow) && !clickedDirection)
                     StartCoroutine(LaunchingObject(downTarget));
-                }
             }
             yield return null;
         }
@@ -111,12 +111,12 @@ public class SpringLeaf : MonoBehaviour {
         ResetSpringLeaf();
         launchedObject.GetComponent<ILaunchable>().ResetObject();
         StartCoroutine("SelectObjectToLaunch");
+        EventBroker.CallSetCanMove(true);
     }
 
     private IEnumerator LaunchingObject(Transform direction) {
         clickedDirection = true;
         StopCoroutine("SelectDirectionToLaunch");
-        EventBroker.CallCameraTarget(launchedObject.transform);
 
         if (launchedObject.GetComponent<RasBehavior>() != null || launchedObject.GetComponent<StrawbertBehavior>() != null)
             ras.withStrawbert = false;

@@ -5,7 +5,7 @@ using UnityEngine;
 using Pathfinding;
 
 public class RasBehavior : MonoBehaviour, ILaunchable {
-    public Transform strawbert;
+    StrawbertBehavior strawbertB;
 
     public bool withStrawbert = true;
     public float waitTeleport;
@@ -13,6 +13,10 @@ public class RasBehavior : MonoBehaviour, ILaunchable {
     public bool BeingLaunched { get; set; }
     public bool HittingSomething { get; set; }
     public bool InRiver { get; set; }
+
+    private void Start() {
+        strawbertB = GameObject.FindWithTag(Tags.PLAYER).GetComponent<StrawbertBehavior>();
+    }
 
     private void OnEnable() {
         EventBroker.onSetCanMove += SetCanMove;
@@ -52,7 +56,7 @@ public class RasBehavior : MonoBehaviour, ILaunchable {
 
     public IEnumerator TeleportToStrawbert() {
         yield return new WaitForSeconds(waitTeleport);
-        transform.position = new Vector2(strawbert.position.x-1, strawbert.position.y);
+        transform.position = new Vector2(strawbertB.transform.position.x-1, strawbertB.transform.position.y);
         withStrawbert = true;
     }
 }

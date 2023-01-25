@@ -2,14 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Environmental : Grabbable {
-    public Transform parentOG;
-
-    protected void Start() {
-        parentOG = transform.parent;
-    }
-
-    void Update() {}
+public abstract class Grabbable : MonoBehaviour {
+    protected static Flower flower;
 
     protected virtual void OnTriggerEnter2D(Collider2D collider) {
         if (collider.gameObject.GetComponent<Flower>() != null) {
@@ -19,19 +13,11 @@ public class Environmental : Grabbable {
         }
     }
 
-    IEnumerator GrabAction() {
+    protected virtual IEnumerator GrabAction() {
         Debug.Log("grabaction");
         flower.grabbing = true;
         // flower.transform.position = transform.position;
 
-        while (!Input.anyKey) { yield return null; }
-
-        if (Input.GetKeyDown("space")) Primary();
-        else if (Input.GetKeyDown(KeyCode.F)) Secondary();
-        else StartCoroutine(flower.Retract());
+        yield return null;
     }
-
-    protected virtual void Primary() {}
-
-    protected virtual void Secondary() {}
 }

@@ -57,7 +57,11 @@ public class Flower : MonoBehaviour {
             yield return null;
         }
 
-        Release();
+        if (transform.GetChild(0).GetComponent<Environmental>() != null)
+            Release();
+        else if (transform.GetChild(0).GetComponent<Collectible>() != null)
+            transform.GetChild(0).GetComponent<Collectible>().Collect();
+
         strawbertB.SetCanFunction(true);
         reaching = false; 
         grappling = false;

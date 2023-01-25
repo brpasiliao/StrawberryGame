@@ -19,6 +19,7 @@ public static class EventBroker {
     }
 
     public static void CallCameraTarget(Transform target) {
+        Debug.Log("event");
         onCameraTarget?.Invoke(target);
     }
 

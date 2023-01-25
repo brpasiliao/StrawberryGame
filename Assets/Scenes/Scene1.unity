@@ -1434,6 +1434,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 594257564}
+  - component: {fileID: 594257566}
   - component: {fileID: 594257563}
   - component: {fileID: 594257565}
   m_Layer: 0
@@ -1514,6 +1515,18 @@ MonoBehaviour:
   m_BoundingShape2D: {fileID: 1260027856}
   m_ConfineScreenEdges: 1
   m_Damping: 0
+--- !u!114 &594257566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594257562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ab36b9d809e3df41bdecdf0f85d39a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &685224958
 GameObject:
   m_ObjectHideFlags: 0
@@ -4807,7 +4820,7 @@ MonoBehaviour:
   posMax: 4.5
   posBack: 2
   lerpSmoothing: 2
-  lerpCutoff: 0.3
+  lerpCutoff: 0.2
   canReach: 1
   reaching: 0
   grabbing: 0
@@ -17585,7 +17598,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8129fb81ac15e44f8846c1b408d2072e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strawbert: {fileID: 1875531371}
   withStrawbert: 1
   waitTeleport: 0
 --- !u!4 &1782421140

@@ -4,7 +4,11 @@ using UnityEngine;
 using Cinemachine;
 
 public class CameraManager : MonoBehaviour {
-    public GameObject strawbertPlayer;
+    StrawbertBehavior strawbertB;
+
+    private void Start() {
+        strawbertB = GameObject.FindWithTag(Tags.PLAYER).GetComponent<StrawbertBehavior>();
+    }
 
     private void OnEnable() {
         EventBroker.onCameraTarget += ChangeTarget;
@@ -17,10 +21,11 @@ public class CameraManager : MonoBehaviour {
     }
 
     public void ChangeTarget(Transform target) {
+        Debug.Log("function");
         GetComponent<CinemachineVirtualCamera>().Follow = target;
     }
 
     public void BackToPlayer() {
-        GetComponent<CinemachineVirtualCamera>().Follow = strawbertPlayer.transform;
+        GetComponent<CinemachineVirtualCamera>().Follow = strawbertB.transform;
     }
 }

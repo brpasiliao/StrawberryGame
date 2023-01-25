@@ -1,9 +1,6 @@
 public class Tags {
     public const string PLAYER = "Player";
     public const string RAS = "Ras";
-    public const string RESOURCE = "Resource";
-    public const string VALUABLE = "Valuable";
-    public const string ARTIFACT = "Artifact";
     public const string OBJECT = "Object";
     public const string THROWNOBJECT = "ThrownObject";
     public const string WALLCOLLISION = "Wall";
