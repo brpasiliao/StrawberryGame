@@ -22,18 +22,6 @@ public class StrawbertBehavior : MonoBehaviour, IThrowable {
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        ThrownCollisionEnter(collision);
-    }
-
-    private void OnCollisionExit2D(Collision2D collision) {
-        ThrownCollisionExit(collision);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision) {
-        ThrownTriggerEnter(collision);
-    }
-
-    public void ThrownCollisionEnter(Collision2D collision) {
         if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT) {
             HittingSomething = true;
         }
@@ -43,13 +31,13 @@ public class StrawbertBehavior : MonoBehaviour, IThrowable {
         }
     }
 
-    public void ThrownCollisionExit(Collision2D collision) {
+    private void OnCollisionExit2D(Collision2D collision) {
         if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT) {
             HittingSomething = false;
         }
     }
 
-    public void ThrownTriggerEnter(Collider2D collision) {
+    private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.tag == Tags.RIVERCOLLISION && SpringLeaf.launching) {
             InRiver = false;
         }

@@ -127,14 +127,12 @@ public class SpringLeaf : MonoBehaviour {
             ras.withStrawbert = false;
 
         EventBroker.CallCameraTarget(thrownObject.transform);
-        while (Vector2.Distance(thrownObject.transform.position, direction.position) > 0.05f && thrownObject.GetComponent<IThrowable>().HittingSomething != true)
-        {
+        while (Vector2.Distance(thrownObject.transform.position, direction.position) > 0.05f && thrownObject.GetComponent<IThrowable>().HittingSomething != true) {
             thrownObject.transform.position = Vector2.Lerp(thrownObject.transform.position, direction.position, smoothing * Time.deltaTime);
             yield return null;
         }
         
-        if (thrownObject.GetComponent<IThrowable>().InRiver)
-        {
+        if (thrownObject.GetComponent<IThrowable>().InRiver) {
             thrownObject.transform.position = objOriginalPos;
             thrownObject.GetComponent<IThrowable>().InRiver = false;
         }
@@ -151,36 +149,4 @@ public class SpringLeaf : MonoBehaviour {
         launching = false;
         clickedDirection = false;
     }
-
-    /*private void ResetThrownObject() {
-        if (thrownObject.GetComponent<StrawbertBehavior>() != null)
-        {
-            thrownObject.GetComponent<StrawbertBehavior>().enabled = true;
-            thrownObject.GetComponent<CapsuleCollider2D>().enabled = true;
-            thrownObject.GetComponent<CapsuleCollider2D>().isTrigger = false;
-        }
-        else if (thrownObject.GetComponent<RasBehavior>() != null)
-        {
-            thrownObject.GetComponent<RasBehavior>().enabled = true;
-            thrownObject.GetComponent<CapsuleCollider2D>().enabled = true;
-            thrownObject.GetComponent<CapsuleCollider2D>().isTrigger = false;
-        }
-        else if(thrownObject.GetComponent<Environmental>() != null)
-        {
-            thrownObject.GetComponent<CapsuleCollider2D>().enabled = true;
-            thrownObject.GetComponent<CapsuleCollider2D>().isTrigger = false;
-        }
-    }
-
-    private void ThrowingObject(int index) {
-        if (nearbyObjects[index].GetComponent<StrawbertBehavior>() != null) {
-            nearbyObjects[index].GetComponent<StrawbertBehavior>().enabled = false;
-        }
-        else if (thrownObject.GetComponent<RasBehavior>() != null) {
-            thrownObject.GetComponent<RasBehavior>().enabled = false;
-        }
-        else if (thrownObject.GetComponent<Environmental>() != null) {
-
-        }
-    }*/
 }

@@ -16,13 +16,11 @@ public static class EventBroker {
         onValuableCollection?.Invoke();
     }
 
-    public static void CallCameraTarget(Transform target)
-    {
+    public static void CallCameraTarget(Transform target) {
         onCameraTarget?.Invoke(target);
     }
 
-    public static void CallPlayerCamera()
-    {
+    public static void CallPlayerCamera() {
         onPlayerCamera?.Invoke();
     }
 

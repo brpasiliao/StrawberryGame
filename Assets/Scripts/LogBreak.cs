@@ -2,13 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LogBreak : MonoBehaviour
-{
+public class LogBreak : MonoBehaviour {
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.GetComponent<Light>() && SpringLeaf.launching)
-        {
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.GetComponent<Light>() && SpringLeaf.launching) {
             Destroy(gameObject);
         }
     }

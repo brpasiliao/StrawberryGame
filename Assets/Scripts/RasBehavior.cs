@@ -26,10 +26,10 @@ public class RasBehavior : MonoBehaviour, IThrowable {
         //     FollowStrawbert();
     }
 
-    void SetCanMove(bool can) {
+    /*void SetCanMove(bool can) {
         if (can) GetComponent<Pathfinding>().canMove = true;
         else GetComponent<Pathfinding>().canMove = false;
-    }
+    }*/
 
     // private void FollowStrawbert() {
     //     posDiffX = Math.Abs(strawbert.position.x - transform.position.x);
@@ -38,63 +38,33 @@ public class RasBehavior : MonoBehaviour, IThrowable {
     //         transform.position = Vector2.MoveTowards(transform.position, strawbert.position, speed);
     // }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        ThrownCollisionEnter(collision);
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        ThrownCollisionExit(collision);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        ThrownTriggerEnter(collision);
-    }
-
-
-
-    public void ThrownCollisionEnter(Collision2D collision)
-    {
-        if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT)
-        {
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT) {
             HittingSomething = true;
         }
-        else if (collision.gameObject.tag == Tags.RIVERCOLLISION && SpringLeaf.launching)
-        {
+        else if (collision.gameObject.tag == Tags.RIVERCOLLISION && SpringLeaf.launching) {
             gameObject.GetComponent<CapsuleCollider2D>().isTrigger = true;
             InRiver = true;
         }
     }
 
-    public void ThrownCollisionExit(Collision2D collision)
-    {
-        if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT)
-        {
+    private void OnCollisionExit2D(Collision2D collision) {
+        if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT) {
             HittingSomething = false;
-        }
-        else if (collision.gameObject.tag == Tags.RIVERCOLLISION)
-        {
-            //inRiver = false;
         }
     }
 
-    public void ThrownTriggerEnter(Collider2D collision)
-    {
-        if (collision.gameObject.tag == Tags.RIVERCOLLISION && SpringLeaf.launching)
-        {
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.gameObject.tag == Tags.RIVERCOLLISION && SpringLeaf.launching) {
             InRiver = false;
         }
     }
 
-    public void ThrowingObject()
-    {
+    public void ThrowingObject() {
         enabled = false;
     }
 
-    public void ResetObject()
-    {
+    public void ResetObject() {
         enabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
     }

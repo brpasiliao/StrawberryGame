@@ -1076,9 +1076,9 @@ RectTransform:
   m_Father: {fileID: 261194702}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -166.59998, y: -221}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 408.40002, y: 26}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &415153706
@@ -4806,8 +4806,8 @@ MonoBehaviour:
   posStep: 0.07
   posMax: 4.5
   posBack: 2
-  lerpSmoothing: 2
-  lerpCutoff: 0.5
+  lerpSmoothing: 0
+  lerpCutoff: 0
   grabbing: 0
   grappling: 0
 --- !u!95 &1083468165
@@ -17030,9 +17030,9 @@ RectTransform:
   m_Father: {fileID: 261194702}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -494, y: -221}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 81, y: 26}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1539900080
@@ -17581,7 +17581,7 @@ MonoBehaviour:
   strawbert: {fileID: 1875531371}
   canMove: 1
   withStrawbert: 1
-  waitTeleport: 1
+  waitTeleport: 0
   speed: 0.15
   maxDistanceX: 1
   maxDistanceY: 1
@@ -18520,10 +18520,6 @@ PrefabInstance:
     - target: {fileID: 8502969764696906026, guid: 24a09a93f7f8a244ba90fe71dad34585, type: 3}
       propertyPath: m_Name
       value: Valuables
-      objectReference: {fileID: 0}
-    - target: {fileID: 8502969764696906026, guid: 24a09a93f7f8a244ba90fe71dad34585, type: 3}
-      propertyPath: m_TagString
-      value: Valuable
       objectReference: {fileID: 0}
     - target: {fileID: 8502969764696906027, guid: 24a09a93f7f8a244ba90fe71dad34585, type: 3}
       propertyPath: m_RootOrder
