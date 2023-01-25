@@ -15,7 +15,7 @@ public class Environmental : Grabbable {
         if (collider.gameObject.GetComponent<Flower>() != null) {
             flower = collider.gameObject.GetComponent<Flower>();
             flower.StopCoroutine("Reach");
-            StartCoroutine("GrabAction");
+            StartCoroutine(GrabAction());
         }
     }
 
@@ -28,7 +28,7 @@ public class Environmental : Grabbable {
 
         if (Input.GetKeyDown("space")) Primary();
         else if (Input.GetKeyDown(KeyCode.F)) Secondary();
-        else flower.StartCoroutine("Retract");
+        else StartCoroutine(flower.Retract());
     }
 
     protected virtual void Primary() {}

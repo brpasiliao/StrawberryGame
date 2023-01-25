@@ -3,23 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum SpringLeafDirections {UpDown, LeftRight}
-public enum SpringLeafObject { Player, Ras, ThrownObject}
 
 public class SpringLeaf : MonoBehaviour {
     public RasBehavior ras;
     public GameObject pointerGO;
     public Pointer pointerC;
-
-    public static bool launching;
     public SpringLeafDirections orientation;
-    public SpringLeafObject objectToThrow;
 
     public int distance = 4;
     public float smoothing = 1;
 
     private List<Transform> nearbyObjects;
     public Transform upTarget, downTarget, leftTarget, rightTarget;
-    private GameObject thrownObject;
+    private GameObject launchedObject;
 
     // private Transform selected;
     private Vector2 target;
@@ -42,7 +38,7 @@ public class SpringLeaf : MonoBehaviour {
                 else nearbyObjects.Insert(1, ras.transform);
             }
 
-            StartCoroutine("SelectObjectToThrow");
+            StartCoroutine("SelectObjectToLaunch");
 
         } else if (collider.gameObject.GetComponent<Light>() != null) {
             nearbyObjects.Add(collider.transform);
@@ -53,7 +49,7 @@ public class SpringLeaf : MonoBehaviour {
         if (collider.gameObject.GetComponent<StrawbertBehavior>() != null) {
             nearbyObjects.Remove(collider.transform);
             nearbyObjects.Remove(ras.transform);
-            StopCoroutine("SelectObjectToThrow");
+            StopCoroutine("SelectObjectToLaunch");
             pointerGO.SetActive(false);
 
         } else if (collider.gameObject.GetComponent<Light>() != null) {
@@ -61,7 +57,7 @@ public class SpringLeaf : MonoBehaviour {
         }
     }
 
-    IEnumerator SelectObjectToThrow() {
+    IEnumerator SelectObjectToLaunch() {
         int index = 0;
         pointerC.PointTo(nearbyObjects[index]);
         pointerGO.SetActive(true);
@@ -80,73 +76,70 @@ public class SpringLeaf : MonoBehaviour {
             yield return null;
         }
 
+        EventBroker.CallSetCanMove(false);
         pointerGO.SetActive(false);
-        launching = true;
+        // launching = true;
         GetComponent<CapsuleCollider2D>().enabled = false;
         objOriginalPos = nearbyObjects[index].position;
         nearbyObjects[index].position = transform.position;
 
-        thrownObject = nearbyObjects[index].gameObject;
-        thrownObject.GetComponent<IThrowable>().ThrowingObject();
+        launchedObject = nearbyObjects[index].gameObject;
+        launchedObject.GetComponent<ILaunchable>().BeingLaunched = true;
 
-        //ThrowingObject(index); 
-        StartCoroutine("SelectDirectionToThrow");
+        StartCoroutine("SelectDirectionToLaunch");
     }
 
-    IEnumerator SelectDirectionToThrow() {
+    IEnumerator SelectDirectionToLaunch() {
         while (!Input.GetKeyDown(KeyCode.Z)) {
             if (orientation == SpringLeafDirections.LeftRight) {
-                if (Input.GetKeyDown(KeyCode.LeftArrow) && !clickedDirection && launching)
-                    StartCoroutine(ThrowingObject(leftTarget));
-                else if (Input.GetKeyDown(KeyCode.RightArrow) && !clickedDirection && launching)
-                    StartCoroutine(ThrowingObject(rightTarget));
+                if (Input.GetKeyDown(KeyCode.LeftArrow) && !clickedDirection)
+                    StartCoroutine(LaunchingObject(leftTarget));
+                else if (Input.GetKeyDown(KeyCode.RightArrow) && !clickedDirection)
+                    StartCoroutine(LaunchingObject(rightTarget));
 
             } else if (orientation == SpringLeafDirections.UpDown) {
-                if (Input.GetKeyDown(KeyCode.UpArrow) && !clickedDirection && launching) {
-                    StartCoroutine(ThrowingObject(upTarget));
-                } else if (Input.GetKeyDown(KeyCode.DownArrow) && !clickedDirection && launching) {
+                if (Input.GetKeyDown(KeyCode.UpArrow) && !clickedDirection) {
+                    StartCoroutine(LaunchingObject(upTarget));
+                } else if (Input.GetKeyDown(KeyCode.DownArrow) && !clickedDirection) {
                     
-                    StartCoroutine(ThrowingObject(downTarget));
+                    StartCoroutine(LaunchingObject(downTarget));
                 }
             }
-
             yield return null;
         }
         
         ResetSpringLeaf();
-        thrownObject.GetComponent<IThrowable>().ResetObject();
-        StartCoroutine("SelectObjectToThrow");
-        //ResetThrownObject();
+        launchedObject.GetComponent<ILaunchable>().ResetObject();
+        StartCoroutine("SelectObjectToLaunch");
     }
 
-    private IEnumerator ThrowingObject(Transform direction) {
+    private IEnumerator LaunchingObject(Transform direction) {
         clickedDirection = true;
-        StopCoroutine("SelectDirectionToThrow");
+        StopCoroutine("SelectDirectionToLaunch");
+        EventBroker.CallCameraTarget(launchedObject.transform);
 
-        if (thrownObject.GetComponent<RasBehavior>() != null || thrownObject.GetComponent<StrawbertBehavior>() != null)
+        if (launchedObject.GetComponent<RasBehavior>() != null || launchedObject.GetComponent<StrawbertBehavior>() != null)
             ras.withStrawbert = false;
 
-        EventBroker.CallCameraTarget(thrownObject.transform);
-        while (Vector2.Distance(thrownObject.transform.position, direction.position) > 0.05f && thrownObject.GetComponent<IThrowable>().HittingSomething != true) {
-            thrownObject.transform.position = Vector2.Lerp(thrownObject.transform.position, direction.position, smoothing * Time.deltaTime);
+        while (Vector2.Distance(launchedObject.transform.position, direction.position) > 0.05f && !launchedObject.GetComponent<ILaunchable>().HittingSomething) {
+            launchedObject.transform.position = Vector2.Lerp(launchedObject.transform.position, direction.position, smoothing * Time.deltaTime);
             yield return null;
         }
         
-        if (thrownObject.GetComponent<IThrowable>().InRiver) {
-            thrownObject.transform.position = objOriginalPos;
-            thrownObject.GetComponent<IThrowable>().InRiver = false;
+        if (launchedObject.GetComponent<ILaunchable>().InRiver) {
+            launchedObject.transform.position = objOriginalPos;
+            launchedObject.GetComponent<ILaunchable>().InRiver = false;
         }
 
         ResetSpringLeaf();
-        //ResetThrownObject();
-        thrownObject.GetComponent<IThrowable>().ResetObject();
-        if (!ras.withStrawbert) ras.StartCoroutine("TeleportToStrawbert");
+        launchedObject.GetComponent<ILaunchable>().ResetObject();
+        if (!ras.withStrawbert) StartCoroutine(ras.TeleportToStrawbert());
+        EventBroker.CallSetCanMove(true);
     }
 
     private void ResetSpringLeaf() {
         GetComponent<CapsuleCollider2D>().enabled = true;
         EventBroker.CallPlayerCamera();
-        launching = false;
         clickedDirection = false;
     }
 }

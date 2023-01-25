@@ -9,7 +9,7 @@ public class Heavy : Environmental {
 
     protected override void Primary() {
         flower.grappling = true;
-        flower.StartCoroutine("Retract");
+        StartCoroutine(flower.Retract());
     }
 
     protected override void Secondary() {

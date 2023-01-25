@@ -4801,13 +4801,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af9514e71244f45b2bf1e58cf087c142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strawbert: {fileID: 0}
+  strawbertB: {fileID: 1875531369}
   posOG: 0
   posStep: 0.07
   posMax: 4.5
   posBack: 2
-  lerpSmoothing: 0
-  lerpCutoff: 0
+  lerpSmoothing: 2
+  lerpCutoff: 0.3
+  canReach: 1
+  reaching: 0
   grabbing: 0
   grappling: 0
 --- !u!95 &1083468165
@@ -16780,6 +16782,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 104427c24237e4d099945ff50a5714b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  strawbertB: {fileID: 1875531369}
+  canAnimate: 1
 --- !u!95 &1430126008
 Animator:
   serializedVersion: 4
@@ -16811,7 +16815,7 @@ GameObject:
   - component: {fileID: 1446943399}
   - component: {fileID: 1446943400}
   m_Layer: 0
-  m_Name: RotatePivot
+  m_Name: Stem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16845,6 +16849,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 394624801e7be4625a0f1da515a09151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  strawbertB: {fileID: 1875531369}
+  canRotate: 1
+  direction: 
 --- !u!1001 &1452815364
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17579,12 +17586,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   strawbert: {fileID: 1875531371}
-  canMove: 1
   withStrawbert: 1
   waitTeleport: 0
-  speed: 0.15
-  maxDistanceX: 1
-  maxDistanceY: 1
 --- !u!4 &1782421140
 Transform:
   m_ObjectHideFlags: 0
@@ -17803,6 +17806,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdd10f5e8ba024b1ca99db0669389aa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  strawbertA: {fileID: 1430126007}
+  stem: {fileID: 1446943400}
+  flower: {fileID: 1083468164}
+  canMove: 1
   speed: 0.1
 --- !u!4 &1875531371
 Transform:

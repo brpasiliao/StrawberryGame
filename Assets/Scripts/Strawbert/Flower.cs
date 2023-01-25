@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 public class Flower : MonoBehaviour {
-    public GameObject strawbert;
+    public StrawbertBehavior strawbertB;
 
     public float posOG;         // original position of head
     public float posStep;       // how long each movement is
@@ -10,61 +10,57 @@ public class Flower : MonoBehaviour {
     public float posBack;       // multiplier to retract faster
     public float lerpSmoothing;
     public float lerpCutoff;
+    public bool canReach = true;
 
-    public static bool reaching = false;
+    public bool reaching = false;   // animation state
     public bool grabbing = false;
     public bool grappling = false;
 
-    void Start() {}
-
     void Update() {
-        if (!reaching && !SpringLeaf.launching && Input.GetKeyDown("space"))
+        if (canReach && Input.GetKeyDown("space"))
             StartCoroutine("Reach");
     }
 
-    IEnumerator Reach() {
-        Debug.Log("reach");
+    public void SetCanReach(bool can) {
+        if (can) canReach = true;
+        else canReach = false;
+    }
 
-        GetComponent<BoxCollider2D>().enabled = true; // can grab multiple?
-        reaching = true;
+    public IEnumerator Reach() {
+        GetComponent<BoxCollider2D>().enabled = true;
+        strawbertB.SetCanFunction(false);
+        reaching = true; 
 
-        // lerp
         Vector3 end = new Vector3(posMax, 0, 0);
         while (transform.localPosition.x < posMax-lerpCutoff) {
             transform.localPosition = Vector2.Lerp(transform.localPosition, end, lerpSmoothing * Time.deltaTime);            // transform.Translate(posStep, 0, 0);
-            // transform.localPosition = new Vector2(transform.localPosition.x, 0);
             yield return null;
         }
 
         Release();
 
-        StartCoroutine("Retract"); 
+        StartCoroutine(Retract()); 
         AstarPath.active.Scan();
     }
 
     public IEnumerator Retract() {
-        Debug.Log("retract");
         grabbing = false;
 
-        // lerp
         Vector3 end = new Vector3(posOG, 0, 0);
         while (transform.localPosition.x > posOG+lerpCutoff) {
             transform.localPosition = Vector2.Lerp(transform.localPosition, end, lerpSmoothing * Time.deltaTime);
-
-        // while (transform.localPosition.x > posOG+(posStep*posBack)) {
-            // transform.Translate(-posStep*posBack, 0, 0);
-            // transform.localPosition = new Vector2(transform.localPosition.x, 0);
-            if (grappling) {
+            // if (grappling) {
                 // strawbert.transform.Translate(-posStep*posBack*2, 0, 0);
                 // Debug.Log("strawbert: " + strawbert.transform.position + "; flower: " + transform.position);
-                strawbert.transform.position = Vector2.MoveTowards(strawbert.transform.position, transform.position, posStep*posBack);
-            }
+                // strawbert.transform.position = Vector2.MoveTowards(strawbert.transform.position, transform.position, posStep*posBack);
+            // }
             yield return null;
         }
 
         Release();
+        strawbertB.SetCanFunction(true);
+        reaching = false; 
         grappling = false;
-        reaching = false;
         transform.localPosition = new Vector2 (posOG, transform.localPosition.y);
         GetComponent<BoxCollider2D>().enabled = false;
         AstarPath.active.Scan();

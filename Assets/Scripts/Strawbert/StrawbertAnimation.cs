@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StrawbertAnimation : MonoBehaviour {
+    public StrawbertBehavior strawbertB;
+
     private Animator animator;
     private string currentState;
+
+    public bool canAnimate = true;
 
     void Start() {
         animator = GetComponent<Animator>();
     }
 
     void Update() {
-        if (!Flower.reaching && !SpringLeaf.launching)
-            MoveAnimation();
-        else if (Flower.reaching && !SpringLeaf.launching)
-            ReachAnimation();
+        if (strawbertB.flower.reaching) ReachAnimation();
+        else if (canAnimate) MoveAnimation();
+    }
+
+    public void SetCanAnimate(bool can) {
+        if (can) canAnimate = true;
+        else canAnimate = false;
     }
 
     void MoveAnimation() {
@@ -39,21 +46,21 @@ public class StrawbertAnimation : MonoBehaviour {
     }
 
     void ReachAnimation() {
-        if (Stem.stemDir == Directions.NORTH)
+        if (strawbertB.stem.direction == Directions.NORTH)
             ChangeAnimationState(FlowerAnimations.NORTH);
-        else if (Stem.stemDir == Directions.EAST)
+        else if (strawbertB.stem.direction == Directions.EAST)
             ChangeAnimationState(FlowerAnimations.EAST);
-        else if (Stem.stemDir == Directions.WEST)
+        else if (strawbertB.stem.direction == Directions.WEST)
             ChangeAnimationState(FlowerAnimations.WEST);
-        else if (Stem.stemDir == Directions.SOUTH)
+        else if (strawbertB.stem.direction == Directions.SOUTH)
             ChangeAnimationState(FlowerAnimations.SOUTH);
-        else if (Stem.stemDir == Directions.NORTHEAST)
+        else if (strawbertB.stem.direction == Directions.NORTHEAST)
             ChangeAnimationState(FlowerAnimations.NORTHEAST);
-        else if (Stem.stemDir == Directions.NORTHWEST)
+        else if (strawbertB.stem.direction == Directions.NORTHWEST)
             ChangeAnimationState(FlowerAnimations.NORTHWEST);
-        else if (Stem.stemDir == Directions.SOUTHEAST)
+        else if (strawbertB.stem.direction == Directions.SOUTHEAST)
             ChangeAnimationState(FlowerAnimations.SOUTHEAST);
-        else if (Stem.stemDir == Directions.SOUTHWEST)
+        else if (strawbertB.stem.direction == Directions.SOUTHWEST)
             ChangeAnimationState(FlowerAnimations.SOUTHWEST);
     }
 

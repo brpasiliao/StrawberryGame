@@ -8,6 +8,8 @@ public static class EventBroker {
     public static event Action<Transform> onCameraTarget;
     public static event Action onPlayerCamera;
 
+    public static event Action<bool> onSetCanMove;
+
     public static void CallResourceCollection() {
         onResourceCollection?.Invoke();
     }
@@ -24,4 +26,7 @@ public static class EventBroker {
         onPlayerCamera?.Invoke();
     }
 
+    public static void CallSetCanMove(bool can) {
+        onSetCanMove?.Invoke(can);
+    }
 }

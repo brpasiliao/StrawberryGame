@@ -4,48 +4,47 @@ using UnityEngine;
 
 //TODO: Animation States
 public class Stem : MonoBehaviour {
-    public static string stemDir;
+    public StrawbertBehavior strawbertB;
 
-    void Start() {}
+    public bool canRotate = true;
+    public string direction;
 
     void Update() {
-        if (!Flower.reaching && !SpringLeaf.launching) {
-            ChangeDirection();
-        }
-        else if (Flower.reaching && !SpringLeaf.launching)
-            ReachAnimation();
-        
+        if (canRotate) ChangeDirection();
+    }
+
+    public void SetCanRotate(bool can) {
+        if (can) canRotate = true;
+        else canRotate = false;
     }
 
     private void ChangeDirection() {
         if (Input.GetAxisRaw(PlayerInput.VERTICAL) > 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) > 0) {
             transform.rotation = Quaternion.Euler(0, 0, 45); // northeast
-            stemDir = Directions.NORTHEAST;
+            direction = Directions.NORTHEAST;
         } else if (Input.GetAxisRaw(PlayerInput.VERTICAL) > 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) < 0) {
             transform.rotation = Quaternion.Euler(0, 0, 135); // northwest
-            stemDir = Directions.NORTHWEST;
+            direction = Directions.NORTHWEST;
         } else if (Input.GetAxisRaw(PlayerInput.VERTICAL) < 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) > 0) {
             transform.rotation = Quaternion.Euler(0, 0, -45); //southeast
-            stemDir = Directions.SOUTHEAST;
+            direction = Directions.SOUTHEAST;
         } else if (Input.GetAxisRaw(PlayerInput.VERTICAL) < 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) < 0) {
             transform.rotation = Quaternion.Euler(0, 0, -135); //southwest
-            stemDir = Directions.SOUTHWEST;
+            direction = Directions.SOUTHWEST;
         } else if (Input.GetAxisRaw(PlayerInput.VERTICAL) > 0) {
             transform.rotation = Quaternion.Euler(0, 0, 90); // north
-            stemDir = Directions.NORTH;
+            direction = Directions.NORTH;
         } else if (Input.GetAxisRaw(PlayerInput.VERTICAL) < 0) {
             transform.rotation = Quaternion.Euler(0, 0, -90); // south
-            stemDir = Directions.SOUTH;
+            direction = Directions.SOUTH;
         } else if (Input.GetAxisRaw(PlayerInput.HORIZONTAL) > 0) {
             transform.rotation = Quaternion.Euler(0, 0, 0); // east
-            stemDir = Directions.EAST;
+            direction = Directions.EAST;
         } else if (Input.GetAxisRaw(PlayerInput.HORIZONTAL) < 0) {
             transform.rotation = Quaternion.Euler(0, 0, 180); // west
-            stemDir = Directions.WEST;
+            direction = Directions.WEST;
         }
     }
 
-    private void ReachAnimation(){
-
-    }
+    void ReachAnimation() {}
 }
