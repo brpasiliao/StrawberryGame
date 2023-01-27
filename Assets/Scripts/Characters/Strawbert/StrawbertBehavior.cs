@@ -67,6 +67,11 @@ public class StrawbertBehavior : MonoBehaviour, ILaunchable {
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
+        /*if (collision.gameObject.tag == Tags.RIVERCOLLISION && BeingLaunched)
+            InRiver = false;*/
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
         if (collision.gameObject.tag == Tags.RIVERCOLLISION && BeingLaunched)
             InRiver = false;
     }
@@ -74,5 +79,6 @@ public class StrawbertBehavior : MonoBehaviour, ILaunchable {
     public void ResetObject() {
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         gameObject.GetComponent<CapsuleCollider2D>().isTrigger = false;
+        BeingLaunched = false;
     }
 }

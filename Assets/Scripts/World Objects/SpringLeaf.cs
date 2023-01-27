@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum SpringLeafDirections {UpDown, LeftRight}
 
-public class SpringLeaf : MonoBehaviour {
+public class SpringLeaf : Environmental {
     RasBehavior ras;
     public GameObject pointerGO;
     public Pointer pointerC;
@@ -22,7 +22,8 @@ public class SpringLeaf : MonoBehaviour {
     private Vector3 objOriginalPos;
     private bool clickedDirection;
 
-    void Start() {
+    protected override void Start() {
+        base.Start();
         ras = GameObject.FindWithTag(Tags.RAS).GetComponent<RasBehavior>();
         nearbyObjects = new List<Transform>();
     }
@@ -141,5 +142,19 @@ public class SpringLeaf : MonoBehaviour {
         GetComponent<CapsuleCollider2D>().enabled = true;
         EventBroker.CallPlayerCamera();
         clickedDirection = false;
+    }
+
+    protected override void Primary() {
+        transform.SetParent(flower.transform);
+        StartCoroutine(flower.Retract());
+    }
+
+    protected override void Secondary() {
+        transform.SetParent(flower.transform);
+        flower.StartCoroutine("Reach");
+    }
+
+    protected override void Cancel() {
+        StartCoroutine(flower.Retract());
     }
 }
