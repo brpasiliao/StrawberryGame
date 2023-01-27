@@ -4,7 +4,7 @@ using UnityEngine;
 public class Flower : MonoBehaviour {
     public StrawbertBehavior strawbertB;
 
-    public float posOG;         // original position of head
+    public float posOG;         // original position of flower
     public float posStep;       // how long each movement is
     public float posMax;        // the farthest length it can go
     public float posBack;       // multiplier to retract faster
@@ -13,8 +13,6 @@ public class Flower : MonoBehaviour {
     public bool canReach = true;
 
     public bool reaching = false;   // animation state
-    public bool grabbing = false;
-    public bool grappling = false;
 
     void Update() {
         if (canReach && Input.GetKeyDown("space"))
@@ -37,23 +35,17 @@ public class Flower : MonoBehaviour {
             yield return null;
         }
 
+        GetComponent<BoxCollider2D>().enabled = false;
         Release();
-
         StartCoroutine(Retract()); 
         AstarPath.active.Scan();
     }
 
     public IEnumerator Retract() {
-        grabbing = false;
-
+        Debug.Log("retract");
         Vector3 end = new Vector3(posOG, 0, 0);
         while (transform.localPosition.x > posOG+lerpCutoff) {
             transform.localPosition = Vector2.Lerp(transform.localPosition, end, lerpSmoothing * Time.deltaTime);
-            // if (grappling) {
-                // strawbert.transform.Translate(-posStep*posBack*2, 0, 0);
-                // Debug.Log("strawbert: " + strawbert.transform.position + "; flower: " + transform.position);
-                // strawbert.transform.position = Vector2.MoveTowards(strawbert.transform.position, transform.position, posStep*posBack);
-            // }
             yield return null;
         }
 
@@ -66,23 +58,42 @@ public class Flower : MonoBehaviour {
         
         strawbertB.SetCanFunction(true);
         reaching = false; 
-        grappling = false;
         transform.localPosition = new Vector2 (posOG, transform.localPosition.y);
-        GetComponent<BoxCollider2D>().enabled = false;
         AstarPath.active.Scan();
     }
 
-    // public IEnumerator Grapple() {
-    //     while (transform.localPosition.x > posOG) {
-    //         strawbert.transform.Translate(-posStep*posBack, 0, 0);
-    //         yield return null;
-    //     }
-    // }
+    public IEnumerator Grapple() {
+        Debug.Log("grapple");
+        transform.SetParent(null);
+        strawbertB.transform.SetParent(transform);
+
+        Vector3 end = new Vector3(posOG, 0, 0);
+        while (strawbertB.transform.localPosition.x < posOG-lerpCutoff && !strawbertB.HittingSomething) {
+            strawbertB.transform.localPosition = Vector2.Lerp(strawbertB.transform.localPosition, end, lerpSmoothing * Time.deltaTime);
+            yield return null;
+        }
+
+        strawbertB.transform.SetParent(null);
+        transform.SetParent(strawbertB.stem.transform);
+        transform.localPosition = new Vector2 (posOG, transform.localPosition.y);
+        reaching = false; 
+        strawbertB.SetCanFunction(true);
+    }
 
     private void Release() {
         if (transform.childCount > 0) {
             Transform child = transform.GetChild(0);
             transform.GetChild(0).SetParent(child.GetComponent<Environmental>().parentOG);
+        }
+    }
+
+    protected virtual void OnTriggerEnter2D(Collider2D collider) {
+        if (collider.GetComponent<Grabbable>() != null) {
+            StopCoroutine("Reach");
+            StartCoroutine(collider.GetComponent<Grabbable>().GrabAction());
+        } else if (collider.GetComponent<LogBreak>() != null || collider.tag == Tags.WALLCOLLISION) {
+            StopCoroutine("Reach");
+            StartCoroutine(Retract());
         }
     }
 }

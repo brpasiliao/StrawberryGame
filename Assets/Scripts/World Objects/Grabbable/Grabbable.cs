@@ -5,19 +5,11 @@ using UnityEngine;
 public abstract class Grabbable : MonoBehaviour {
     protected static Flower flower;
 
-    protected virtual void OnTriggerEnter2D(Collider2D collider) {
-        if (collider.gameObject.GetComponent<Flower>() != null) {
-            flower = collider.gameObject.GetComponent<Flower>();
-            flower.StopCoroutine("Reach");
-            StartCoroutine(GrabAction());
-        }
+    protected virtual void Start() {
+        flower = GameObject.FindWithTag(Tags.PLAYER).GetComponent<StrawbertBehavior>().flower;
     }
 
-    protected virtual IEnumerator GrabAction() {
-        Debug.Log("grabaction");
-        flower.grabbing = true;
-        // flower.transform.position = transform.position;
-
+    public virtual IEnumerator GrabAction() {
         yield return null;
     }
 }

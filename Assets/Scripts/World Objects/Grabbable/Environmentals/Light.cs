@@ -7,10 +7,6 @@ public class Light : Environmental, ILaunchable {
     public bool HittingSomething { get; set; }
     public bool InRiver { get; set; }
 
-    new void Start() { base.Start(); }
-
-    void Update() {}
-
     protected override void Primary() {
         transform.SetParent(flower.transform);
         StartCoroutine(flower.Retract());
@@ -19,6 +15,10 @@ public class Light : Environmental, ILaunchable {
     protected override void Secondary() {
         transform.SetParent(flower.transform);
         flower.StartCoroutine("Reach");
+    }
+
+    protected override void Cancel() {
+        StartCoroutine(flower.Retract());
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
@@ -37,8 +37,7 @@ public class Light : Environmental, ILaunchable {
         }
     }
 
-    protected override void OnTriggerEnter2D(Collider2D collision) {
-        base.OnTriggerEnter2D(collision);
+    private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.tag == Tags.RIVERCOLLISION && BeingLaunched) {
             InRiver = false;
         }
