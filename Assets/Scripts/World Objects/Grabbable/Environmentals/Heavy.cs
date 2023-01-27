@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Heavy : Environmental {
+    bool onEdge = false;
+
+    private void Update() {
+        Vector3 destination = new Vector3(Input.GetAxisRaw(PlayerInput.HORIZONTAL), Input.GetAxisRaw(PlayerInput.VERTICAL), 0);
+        destination.Normalize();
+        transform.Translate(destination.x, destination.y, 0);
+    }
+
     protected override void Primary() {
         StartCoroutine(flower.Grapple());
     }
 
     protected override void Secondary() {
         Debug.Log("heavy secondary");
-        transform.SetParent(flower.transform);
         StartCoroutine(PushOrPull());
     }
 
@@ -19,55 +26,57 @@ public class Heavy : Environmental {
         StartCoroutine(flower.Retract());
     }
 
-    // dont judge this i promise i will fix
-    // private IEnumerator PushOrPull() {
-    //     while (!Input.GetKeyDown(KeyCode.UpArrow) ||
-    //         !Input.GetKeyDown(KeyCode.DownArrow) ||
-    //         !Input.GetKeyDown(KeyCode.LeftArrow) ||
-    //         !Input.GetKeyDown(KeyCode.RightArrow))
-    //             { yield return null; }
+    private IEnumerator PushOrPull() {
+        while (!Input.GetKeyDown(KeyCode.UpArrow) &&
+            !Input.GetKeyDown(KeyCode.DownArrow) &&
+            !Input.GetKeyDown(KeyCode.LeftArrow) &&
+            !Input.GetKeyDown(KeyCode.RightArrow))
+                { yield return null; }
 
-    //     Debug.Log("chose direction");
-
-    //     if (flower.strawbertB.stem.direction == Directions.NORTH) {
-    //         if (Input.GetKeyDown(KeyCode.UpArrow)) {
-    //             transform.SetParent(flower.transform);
-    //             flower.StartCoroutine("Reach");
-    //         } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
-    //             transform.SetParent(flower.transform);
-    //             StartCoroutine(flower.Retract());
-    //         }
-    //     } else if (flower.strawbertB.stem.direction == Directions.SOUTH) {
-    //         if (Input.GetKeyDown(KeyCode.UpArrow)) {
-    //             transform.SetParent(flower.transform);
-    //             StartCoroutine(flower.Retract());
-    //         } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
-    //             transform.SetParent(flower.transform);
-    //             flower.StartCoroutine("Reach");
-    //         }
-    //     } else if (flower.strawbertB.stem.direction == Directions.WEST) {
-    //         if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-    //             transform.SetParent(flower.transform);
-    //             StartCoroutine(flower.Retract());
-    //         } else if (Input.GetKeyDown(KeyCode.RightArrow)) {
-    //             transform.SetParent(flower.transform);
-    //             flower.StartCoroutine("Reach");
-    //         }
-    //     } else if (flower.strawbertB.stem.direction == Directions.EAST) {
-    //         if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-    //             transform.SetParent(flower.transform);
-    //             flower.StartCoroutine("Reach");
-    //         } else if (Input.GetKeyDown(KeyCode.RightArrow)) {
-    //             transform.SetParent(flower.transform);
-    //             StartCoroutine(flower.Retract());
-    //         }
-    //     }
-    // }
-
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.GetComponent<RockScratch>() != null) {
-            flower.StopCoroutine("Reach");
+        if (!onEdge &&
+            (Input.GetKeyDown(KeyCode.UpArrow) &&
+            flower.strawbertB.stem.direction == Directions.NORTH) ||
+            (Input.GetKeyDown(KeyCode.DownArrow) &&
+            flower.strawbertB.stem.direction == Directions.SOUTH) ||
+            (Input.GetKeyDown(KeyCode.LeftArrow) &&
+            flower.strawbertB.stem.direction == Directions.WEST) ||
+            (Input.GetKeyDown(KeyCode.RightArrow) &&
+            flower.strawbertB.stem.direction == Directions.EAST)) {
+                transform.SetParent(flower.transform);
+                flower.StartCoroutine("Reach");
+        } else if (!onEdge &&
+            (Input.GetKeyDown(KeyCode.UpArrow) &&
+            flower.strawbertB.stem.direction == Directions.SOUTH) ||
+            (Input.GetKeyDown(KeyCode.DownArrow) &&
+            flower.strawbertB.stem.direction == Directions.NORTH) ||
+            (Input.GetKeyDown(KeyCode.LeftArrow) &&
+            flower.strawbertB.stem.direction == Directions.EAST) ||
+            (Input.GetKeyDown(KeyCode.RightArrow) &&
+            flower.strawbertB.stem.direction == Directions.WEST)) {
+                transform.SetParent(flower.transform);
+                StartCoroutine(flower.Retract());
+        } else {
             StartCoroutine(flower.Retract());
         }
     }
+
+    // private void OnTriggerEnter2D(Collider2D collider) {
+    //     if (collider.GetComponent<RockScratch>() != null) {
+    //         onEdge = true;
+
+    //         transform.SetParent(parentOG);
+    //         flower.StopCoroutine("Reach");
+    //         StartCoroutine(flower.Retract());
+    //     }
+    // }
+
+    // private void OnTriggerExit2D(Collider2D collider) {
+    //     if (collider.GetComponent<RockScratch>() != null) {
+    //         onEdge = false;
+
+    //         transform.SetParent(parentOG);
+    //         flower.StopCoroutine("Reach");
+    //         StartCoroutine(flower.Retract());
+    //     }
+    // }
 }
