@@ -21,7 +21,6 @@ public class CameraManager : MonoBehaviour {
     }
 
     public void ChangeTarget(Transform target) {
-        Debug.Log("function");
         GetComponent<CinemachineVirtualCamera>().Follow = target;
     }
 

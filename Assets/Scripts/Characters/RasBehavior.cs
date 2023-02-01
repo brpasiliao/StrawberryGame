@@ -10,6 +10,7 @@ public class RasBehavior : MonoBehaviour, ILaunchable {
     public bool withStrawbert = true;
     public float waitTeleport;
 
+    public Vector3 PosOG { get; set; }
     public bool BeingLaunched { get; set; }
     public bool HittingSomething { get; set; }
     public bool InRiver { get; set; }
@@ -32,26 +33,32 @@ public class RasBehavior : MonoBehaviour, ILaunchable {
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT) {
+        if (collision.gameObject.CompareTag(Tags.WALLCOLLISION) || collision.gameObject.CompareTag(Tags.OBJECT)) {
             HittingSomething = true;
-        } else if (collision.gameObject.tag == Tags.RIVERCOLLISION && BeingLaunched) {
+        } else if (collision.gameObject.CompareTag(Tags.RIVERCOLLISION) && BeingLaunched) {
             gameObject.GetComponent<CapsuleCollider2D>().isTrigger = true;
             InRiver = true;
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision) {
-        if (collision.gameObject.tag == Tags.WALLCOLLISION || collision.gameObject.tag == Tags.OBJECT)
+        if (collision.gameObject.CompareTag(Tags.WALLCOLLISION) || collision.gameObject.CompareTag(Tags.OBJECT))
             HittingSomething = false;
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
-        if (collision.gameObject.tag == Tags.RIVERCOLLISION && BeingLaunched) 
+        if (collision.gameObject.CompareTag(Tags.RIVERCOLLISION) && BeingLaunched)
             InRiver = false;
     }
 
     public void ResetObject() {
+        if (InRiver) {
+            transform.position = PosOG;
+            InRiver = false;
+        }
+
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+        BeingLaunched = false;
     }
 
     public IEnumerator TeleportToStrawbert() {

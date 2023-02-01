@@ -82,11 +82,11 @@ public class SpringLeaf : Environmental {
         pointerGO.SetActive(false);
         // launching = true;
         GetComponent<CapsuleCollider2D>().enabled = false;
-        objOriginalPos = nearbyObjects[index].position;
         nearbyObjects[index].position = transform.position;
 
         launchedObject = nearbyObjects[index].gameObject;
         launchedObject.GetComponent<ILaunchable>().BeingLaunched = true;
+        launchedObject.GetComponent<ILaunchable>().PosOG = launchedObject.transform.position;
         EventBroker.CallCameraTarget(launchedObject.transform);
 
         StartCoroutine("SelectDirectionToLaunch");
@@ -125,11 +125,6 @@ public class SpringLeaf : Environmental {
         while (Vector2.Distance(launchedObject.transform.position, direction.position) > 0.05f && !launchedObject.GetComponent<ILaunchable>().HittingSomething) {
             launchedObject.transform.position = Vector2.Lerp(launchedObject.transform.position, direction.position, smoothing * Time.deltaTime);
             yield return null;
-        }
-        
-        if (launchedObject.GetComponent<ILaunchable>().InRiver) {
-            launchedObject.transform.position = objOriginalPos;
-            launchedObject.GetComponent<ILaunchable>().InRiver = false;
         }
 
         ResetSpringLeaf();

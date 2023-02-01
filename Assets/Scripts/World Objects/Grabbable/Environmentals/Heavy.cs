@@ -5,12 +5,6 @@ using UnityEngine;
 public class Heavy : Environmental {
     bool onEdge = false;
 
-    private void Update() {
-        Vector3 destination = new Vector3(Input.GetAxisRaw(PlayerInput.HORIZONTAL), Input.GetAxisRaw(PlayerInput.VERTICAL), 0);
-        destination.Normalize();
-        transform.Translate(destination.x, destination.y, 0);
-    }
-
     protected override void Primary() {
         StartCoroutine(flower.Grapple());
     }
