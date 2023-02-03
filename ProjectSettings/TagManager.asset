@@ -9,6 +9,7 @@ TagManager:
   - Ras
   - Wall
   - River
+  - Pit
   layers:
   - Default
   - TransparentFX

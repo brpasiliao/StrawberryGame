@@ -15,8 +15,10 @@ public class Flower : MonoBehaviour {
     public bool reaching = false;   // animation state
 
     void Update() {
-        if (canReach && Input.GetKeyDown("space"))
+        if (canReach && Input.GetKeyDown("space")) {
             StartCoroutine("Reach");
+            EventBroker.CallFlowerReach();
+        }
     }
 
     public void SetCanReach(bool can) {
@@ -59,6 +61,8 @@ public class Flower : MonoBehaviour {
         strawbertB.SetCanFunction(true);
         reaching = false; 
         transform.localPosition = new Vector2 (posOG, transform.localPosition.y);
+        GetComponent<BoxCollider2D>().enabled = false;
+        EventBroker.CallFlowerReach();
         AstarPath.active.Scan();
     }
 

@@ -12,6 +12,7 @@ public class SpringLeaf : Environmental {
 
     public int distance = 4;
     public float smoothing = 1;
+    public bool pickedUp;
 
     private List<Transform> nearbyObjects;
     public Transform upTarget, downTarget, leftTarget, rightTarget;
@@ -22,6 +23,14 @@ public class SpringLeaf : Environmental {
     private Vector3 objOriginalPos;
     private bool clickedDirection;
 
+    private void OnEnable() {
+        EventBroker.onFlowerReach += ToggleCircleCollider;
+    }
+
+    private void OnDisable() {
+        EventBroker.onFlowerReach -= ToggleCircleCollider;
+    }
+
     protected override void Start() {
         base.Start();
         ras = GameObject.FindWithTag(Tags.RAS).GetComponent<RasBehavior>();
@@ -31,7 +40,7 @@ public class SpringLeaf : Environmental {
     void Update() {}
 
     private void OnTriggerEnter2D(Collider2D collider) {
-        if (collider.gameObject.GetComponent<StrawbertBehavior>() != null) {
+        if (collider.gameObject.GetComponent<StrawbertBehavior>() != null && !pickedUp) {
             if (nearbyObjects.Count == 0) nearbyObjects.Add(collider.transform);
             else nearbyObjects.Insert(0, collider.transform);
 
@@ -42,8 +51,11 @@ public class SpringLeaf : Environmental {
 
             StartCoroutine("SelectObjectToLaunch");
 
-        } else if (collider.gameObject.GetComponent<Light>() != null) {
+        } else if (collider.gameObject.GetComponent<Light>() != null && !pickedUp) {
             nearbyObjects.Add(collider.transform);
+        } else if (collider.gameObject.GetComponent<Pit>() != null && pickedUp) {
+            nearbyObjects.Add(collider.transform);
+            StartCoroutine(PlaceOnPit());
         }
     }
 
@@ -56,6 +68,9 @@ public class SpringLeaf : Environmental {
 
         } else if (collider.gameObject.GetComponent<Light>() != null) {
             nearbyObjects.Remove(collider.transform);
+        } else if(collider.gameObject.GetComponent<Pit>() != null) {
+            nearbyObjects.Remove(collider.transform);
+            StopCoroutine("PlaceOnPit");
         }
     }
 
@@ -92,13 +107,44 @@ public class SpringLeaf : Environmental {
         StartCoroutine("SelectDirectionToLaunch");
     }
 
+    IEnumerator PlaceOnPit() {
+        int index = 0;
+        pointerC.PointTo(nearbyObjects[index]);
+        pointerGO.SetActive(true);
+
+        while (!Input.GetKeyDown(KeyCode.F)) {
+            if (Input.GetKeyDown(KeyCode.Q)) {
+                    Debug.Log("log");
+                    orientation = SpringLeafDirections.UpDown;
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
+            } else if (Input.GetKeyDown(KeyCode.E)) {
+                    Debug.Log("lag");
+                    orientation = SpringLeafDirections.LeftRight;
+                    transform.rotation = Quaternion.Euler(0, 0, 90);
+            }
+            yield return null;
+        }
+
+        launchedObject = nearbyObjects[index].gameObject;
+        transform.position = launchedObject.transform.position;
+        transform.SetParent(launchedObject.transform);
+        ChangingLocation();
+        if (nearbyObjects.Count <= 1) {
+            nearbyObjects.Clear();
+        }
+        StopCoroutine("PlaceOnPit");
+        //launchedObject.GetComponent<CapsuleCollider2D>().enabled = false;
+        
+
+    }
+
     IEnumerator SelectDirectionToLaunch() {
         while (!Input.GetKeyDown(KeyCode.Z)) {
             if (orientation == SpringLeafDirections.LeftRight) {
                 if (Input.GetKeyDown(KeyCode.LeftArrow) && !clickedDirection)
-                    StartCoroutine(LaunchingObject(leftTarget));
+                    StartCoroutine(LaunchingObject(upTarget));
                 else if (Input.GetKeyDown(KeyCode.RightArrow) && !clickedDirection)
-                    StartCoroutine(LaunchingObject(rightTarget));
+                    StartCoroutine(LaunchingObject(downTarget));
 
             } else if (orientation == SpringLeafDirections.UpDown) {
                 if (Input.GetKeyDown(KeyCode.UpArrow) && !clickedDirection)
@@ -140,8 +186,8 @@ public class SpringLeaf : Environmental {
     }
 
     protected override void Primary() {
-        transform.SetParent(flower.transform);
         StartCoroutine(flower.Retract());
+        ChangingLocation();
     }
 
     protected override void Secondary() {
@@ -151,5 +197,26 @@ public class SpringLeaf : Environmental {
 
     protected override void Cancel() {
         StartCoroutine(flower.Retract());
+    }
+
+    private void ToggleCircleCollider() {
+        if (GetComponent<CircleCollider2D>().enabled) 
+            GetComponent<CircleCollider2D>().enabled = false;
+        else
+            GetComponent<CircleCollider2D>().enabled = true;
+    }
+
+    private void ChangingLocation() {
+        if (!pickedUp) {
+            GetComponent<CapsuleCollider2D>().isTrigger = true;
+            GetComponent<CircleCollider2D>().enabled = false;
+            transform.SetParent(ras.transform);
+            transform.position = ras.transform.position;
+            pickedUp = true;
+        } else {
+            GetComponent<CapsuleCollider2D>().isTrigger = false;
+            GetComponent<CircleCollider2D>().enabled = true;
+            pickedUp = false;
+        }
     }
 }

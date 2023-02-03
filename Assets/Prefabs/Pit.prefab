@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2707934286690314604}
   - component: {fileID: 8300072038799907364}
+  - component: {fileID: 1132619045168520720}
   m_Layer: 0
   m_Name: Pit
   m_TagString: Untagged
@@ -45,6 +46,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a4576b64453aa4baba4e8e90cc2463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!70 &1132619045168520720
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815930403095683005}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.017978668, y: 0.5393473}
+  m_Size: {x: 1.309021, y: 1.7910426}
+  m_Direction: 0
 --- !u!1 &3123254106573211265
 GameObject:
   m_ObjectHideFlags: 0

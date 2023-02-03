@@ -7,6 +7,7 @@ public static class EventBroker {
     public static event Action onValuableCollection;
     public static event Action<Transform> onCameraTarget;
     public static event Action onPlayerCamera;
+    public static event Action onFlowerReach;
 
     public static event Action<bool> onSetCanMove;
 
@@ -28,5 +29,9 @@ public static class EventBroker {
 
     public static void CallSetCanMove(bool can) {
         onSetCanMove?.Invoke(can);
+    }
+
+    public static void CallFlowerReach() {
+        onFlowerReach?.Invoke();
     }
 }

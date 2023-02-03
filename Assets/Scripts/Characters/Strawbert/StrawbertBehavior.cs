@@ -98,4 +98,5 @@ public class StrawbertBehavior : MonoBehaviour, ILaunchable {
         gameObject.GetComponent<CapsuleCollider2D>().isTrigger = false;
         BeingLaunched = false;
     }
+
 }
