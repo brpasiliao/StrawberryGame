@@ -53,24 +53,4 @@ public class Heavy : Environmental {
             StartCoroutine(flower.Retract());
         }
     }
-
-    // private void OnTriggerEnter2D(Collider2D collider) {
-    //     if (collider.GetComponent<RockScratch>() != null) {
-    //         onEdge = true;
-
-    //         transform.SetParent(parentOG);
-    //         flower.StopCoroutine("Reach");
-    //         StartCoroutine(flower.Retract());
-    //     }
-    // }
-
-    // private void OnTriggerExit2D(Collider2D collider) {
-    //     if (collider.GetComponent<RockScratch>() != null) {
-    //         onEdge = false;
-
-    //         transform.SetParent(parentOG);
-    //         flower.StopCoroutine("Reach");
-    //         StartCoroutine(flower.Retract());
-    //     }
-    // }
 }
