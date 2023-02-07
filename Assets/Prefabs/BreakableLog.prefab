@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6125263624084173822}
   - component: {fileID: 555109172711275486}
   m_Layer: 0
-  m_Name: Skinny-Log
+  m_Name: BreakableLog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

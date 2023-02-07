@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2420029008177450768}
   - component: {fileID: 7087060016415532200}
   - component: {fileID: 3465372022038976035}
-  m_Layer: 0
-  m_Name: Square
+  m_Layer: 7
+  m_Name: JumpableLog
   m_TagString: River
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
