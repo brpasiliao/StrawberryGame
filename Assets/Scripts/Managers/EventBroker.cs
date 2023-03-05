@@ -6,6 +6,7 @@ public static class EventBroker {
     public static event Action onResourceCollection;
     public static event Action onValuableCollection;
     public static event Action<Transform> onCameraTarget;
+    public static event Action<Collider2D> onConfinerSwitch;
     public static event Action onPlayerCamera;
     public static event Action onFlowerReach;
 
@@ -33,5 +34,9 @@ public static class EventBroker {
 
     public static void CallFlowerReach() {
         onFlowerReach?.Invoke();
+    }
+
+    public static void CallConfinerSwitch(Collider2D confiner) {
+        onConfinerSwitch?.Invoke(confiner);
     }
 }

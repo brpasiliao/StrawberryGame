@@ -41,8 +41,22 @@ public class StrawbertAnimation : MonoBehaviour {
             ChangeAnimationState(PlayerAnimations.EAST);
         else if (Input.GetAxisRaw(PlayerInput.HORIZONTAL) < 0)
             ChangeAnimationState(PlayerAnimations.WEST);
-        else
-            ChangeAnimationState(PlayerAnimations.IDLE); 
+        else if (Input.GetAxisRaw(PlayerInput.VERTICAL) == 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) == 0 && currentState == PlayerAnimations.SOUTH)
+            ChangeAnimationState(PlayerAnimations.IDLE);
+        else if (Input.GetAxisRaw(PlayerInput.VERTICAL) == 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) == 0 && currentState == PlayerAnimations.NORTH)
+            ChangeAnimationState(PlayerAnimations.IDLENORTH);
+        else if (Input.GetAxisRaw(PlayerInput.VERTICAL) == 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) == 0 && currentState == PlayerAnimations.EAST)
+            ChangeAnimationState(PlayerAnimations.IDLEEAST);
+        else if (Input.GetAxisRaw(PlayerInput.VERTICAL) == 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) == 0 && currentState == PlayerAnimations.WEST)
+            ChangeAnimationState(PlayerAnimations.IDLEWEST);
+        else if (Input.GetAxisRaw(PlayerInput.VERTICAL) == 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) == 0 && currentState == PlayerAnimations.SOUTHEAST)
+            ChangeAnimationState(PlayerAnimations.IDLESOUTHEAST);
+        else if (Input.GetAxisRaw(PlayerInput.VERTICAL) == 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) == 0 && currentState == PlayerAnimations.SOUTHWEST)
+            ChangeAnimationState(PlayerAnimations.IDLESOUTHWEST);
+        else if (Input.GetAxisRaw(PlayerInput.VERTICAL) == 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) == 0 && currentState == PlayerAnimations.NORTHEAST)
+            ChangeAnimationState(PlayerAnimations.IDLENORTHEAST);
+        else if (Input.GetAxisRaw(PlayerInput.VERTICAL) == 0 && Input.GetAxisRaw(PlayerInput.HORIZONTAL) == 0 && currentState == PlayerAnimations.NORTHWEST)
+            ChangeAnimationState(PlayerAnimations.IDLENORTHWEST);
     }
 
     void ReachAnimation() {

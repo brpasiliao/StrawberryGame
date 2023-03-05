@@ -14,6 +14,15 @@ public class PlayerInput {
 
 public class PlayerAnimations {
     public const string IDLE = "Idle";
+    public const string IDLENORTH = "IdleNorth";
+    public const string IDLESOUTH = "IdleSouth";
+    public const string IDLEEAST = "IdleEast";
+    public const string IDLEWEST = "IdleWest";
+    public const string IDLENORTHWEST = "IdleNorthWest";
+    public const string IDLENORTHEAST = "IdleNorthEast";
+    public const string IDLESOUTHWEST = "IdleSouthWest";
+    public const string IDLESOUTHEAST = "IdleSouthEast";
+
     public const string NORTH = "MoveNorth";
     public const string SOUTH = "MoveSouth";
     public const string EAST = "MoveEast";
