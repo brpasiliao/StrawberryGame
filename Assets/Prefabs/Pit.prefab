@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2707934286690314604}
   - component: {fileID: 8300072038799907364}
   - component: {fileID: 1132619045168520720}
+  - component: {fileID: 769160794418953979}
   m_Layer: 0
   m_Name: Pit
   m_TagString: Untagged
@@ -62,6 +63,27 @@ CapsuleCollider2D:
   m_Offset: {x: 0.017978668, y: 0.5393473}
   m_Size: {x: 1.309021, y: 1.7910426}
   m_Direction: 0
+--- !u!50 &769160794418953979
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815930403095683005}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 7
 --- !u!1 &3123254106573211265
 GameObject:
   m_ObjectHideFlags: 0

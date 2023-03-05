@@ -5,9 +5,9 @@ public class Flower : MonoBehaviour {
     public StrawbertBehavior strawbertB;
 
     public float posOG;         // original position of flower
-    public float posStep;       // how long each movement is
+    //public float posStep;       // how long each movement is
     public float posMax;        // the farthest length it can go
-    public float posBack;       // multiplier to retract faster
+    //public float posBack;       // multiplier to retract faster
     public float lerpSmoothing;
     public float lerpCutoff;
     public bool canReach = true;
@@ -32,7 +32,7 @@ public class Flower : MonoBehaviour {
         reaching = true; 
 
         Vector3 end = new Vector3(posMax, 0, 0);
-        while (transform.localPosition.x < posMax-lerpCutoff) {
+        while (transform.localPosition.x < posMax- lerpCutoff) {
             transform.localPosition = Vector2.Lerp(transform.localPosition, end, lerpSmoothing * Time.deltaTime);            // transform.Translate(posStep, 0, 0);
             yield return null;
         }

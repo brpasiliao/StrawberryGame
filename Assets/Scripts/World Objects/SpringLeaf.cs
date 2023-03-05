@@ -8,7 +8,7 @@ public class SpringLeaf : Environmental {
     RasBehavior ras;
     public GameObject pointerGO;
     public Pointer pointerC;
-    public SpringLeafDirections orientation;
+    private SpringLeafDirections orientation;
 
     public int distance = 4;
     public float smoothing = 1;
@@ -17,6 +17,7 @@ public class SpringLeaf : Environmental {
     private List<Transform> nearbyObjects;
     public Transform upTarget, downTarget, leftTarget, rightTarget;
     private GameObject launchedObject;
+    private GameObject pit;
 
     // private Transform selected;
     private Vector2 target;
@@ -97,7 +98,7 @@ public class SpringLeaf : Environmental {
         pointerGO.SetActive(false);
         // launching = true;
         GetComponent<CapsuleCollider2D>().enabled = false;
-        nearbyObjects[index].position = transform.position;
+        nearbyObjects[index].position = gameObject.transform.position;
 
         launchedObject = nearbyObjects[index].gameObject;
         launchedObject.GetComponent<ILaunchable>().BeingLaunched = true;
@@ -114,22 +115,28 @@ public class SpringLeaf : Environmental {
 
         while (!Input.GetKeyDown(KeyCode.F)) {
             if (Input.GetKeyDown(KeyCode.Q)) {
-                    Debug.Log("log");
-                    orientation = SpringLeafDirections.UpDown;
-                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                Debug.Log("log");
+                orientation = SpringLeafDirections.UpDown;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                if (index == 0) index = nearbyObjects.Count - 1;
+                    else index--;
+                pointerC.PointTo(nearbyObjects[index]);
             } else if (Input.GetKeyDown(KeyCode.E)) {
-                    Debug.Log("lag");
-                    orientation = SpringLeafDirections.LeftRight;
-                    transform.rotation = Quaternion.Euler(0, 0, 90);
+                Debug.Log("lag");
+                orientation = SpringLeafDirections.LeftRight;
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+                if (index == nearbyObjects.Count - 1) index = 0;
+                    else index++;
+                pointerC.PointTo(nearbyObjects[index]);
             }
             yield return null;
         }
 
-        launchedObject = nearbyObjects[index].gameObject;
-        transform.position = launchedObject.transform.position;
-        transform.SetParent(launchedObject.transform);
+        pit = nearbyObjects[index].gameObject;
+        transform.position = pit.transform.position;
+        transform.SetParent(pit.transform);
         ChangingLocation();
-        if (nearbyObjects.Count <= 1) {
+        if (nearbyObjects.Count > 1) {
             nearbyObjects.Clear();
         }
         StopCoroutine("PlaceOnPit");
@@ -208,15 +215,27 @@ public class SpringLeaf : Environmental {
 
     private void ChangingLocation() {
         if (!pickedUp) {
-            GetComponent<CapsuleCollider2D>().isTrigger = true;
+            GetComponent<CapsuleCollider2D>().enabled = false;
             GetComponent<CircleCollider2D>().enabled = false;
+            if(pit != null)
+            pit.GetComponent<CapsuleCollider2D>().enabled = true;
             transform.SetParent(ras.transform);
             transform.position = ras.transform.position;
             pickedUp = true;
         } else {
-            GetComponent<CapsuleCollider2D>().isTrigger = false;
+            GetComponent<CapsuleCollider2D>().enabled = true;
             GetComponent<CircleCollider2D>().enabled = true;
+            if(pit != null)
+            pit.GetComponent<CapsuleCollider2D>().enabled = false;
             pickedUp = false;
         }
+    }
+
+    private void Planted() {
+        GetComponent<CapsuleCollider2D>().enabled = true;
+        GetComponent<CircleCollider2D>().enabled = true;
+        if (pit != null)
+            pit.GetComponent<CapsuleCollider2D>().enabled = true;
+        pickedUp = false;
     }
 }
