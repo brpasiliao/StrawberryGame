@@ -32,7 +32,7 @@ public class Flower : MonoBehaviour {
         reaching = true; 
 
         Vector3 end = new Vector3(posMax, 0, 0);
-        while (transform.localPosition.x < posMax- lerpCutoff) {
+        while (transform.localPosition.x < posMax-lerpCutoff) {
             transform.localPosition = Vector2.Lerp(transform.localPosition, end, lerpSmoothing * Time.deltaTime);            // transform.Translate(posStep, 0, 0);
             yield return null;
         }
